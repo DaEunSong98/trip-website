@@ -18,7 +18,7 @@ import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.Comment;
 
 @RestController
-@RequestMapping("/articles")
+@RequestMapping("/board")
 public class CommentController {
 
 	
