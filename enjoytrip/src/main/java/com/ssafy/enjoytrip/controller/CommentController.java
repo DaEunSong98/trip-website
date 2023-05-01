@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.dto.Board;
-import com.ssafy.enjoytrip.dto.Comment;
+import com.ssafy.enjoytrip.domain.Board;
+import com.ssafy.enjoytrip.domain.Comment;
 
 @RestController
 @RequestMapping("/articles")

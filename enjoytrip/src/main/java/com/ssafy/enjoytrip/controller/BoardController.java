@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.dto.Board;
-import com.ssafy.enjoytrip.dto.SearchDto;
+import com.ssafy.enjoytrip.domain.Board;
+
 
 @RestController
 @RequestMapping("/board")
 public class BoardController {
 	
+
 	//게시글 세부 정보 
 	@GetMapping("/{board_id}")
 	protected ResponseEntity<?> getBoardDetail(@PathVariable long board_id) throws Exception {
@@ -54,11 +55,11 @@ public class BoardController {
 		return new ResponseEntity<>(HttpStatus.OK); 
 	}
 
-	//게시글 검색 내용 조회 
-	protected ResponseEntity<?> search(@RequestBody SearchDto dto){
-		
-		return new ResponseEntity<>(HttpStatus.OK); 
-	}
-	
+//	//게시글 검색 내용 조회 
+//	protected ResponseEntity<?> search(@RequestBody SearchDto dto){
+//		
+//		return new ResponseEntity<>(HttpStatus.OK); 
+//	}
+//	
 	
 }

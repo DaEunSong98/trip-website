@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.dto.User;
+import com.ssafy.enjoytrip.domain.User;
+
+
 
 @RestController
 @RequestMapping("/user")
