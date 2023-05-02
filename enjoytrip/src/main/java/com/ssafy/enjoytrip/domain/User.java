@@ -1,31 +1,23 @@
 package com.ssafy.enjoytrip.domain;
 
-<<<<<<< HEAD
-import lombok.AllArgsConstructor;
+
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-=======
-import lombok.*;
->>>>>>> a08410f8922a003c8208b5148bde8cb9525af514
+import lombok.NoArgsConstructor;
+
 
 import javax.persistence.*;
 
 @Getter
 @Entity
-<<<<<<< HEAD
-@AllArgsConstructor
-=======
-@NoArgsConstructor
->>>>>>> a08410f8922a003c8208b5148bde8cb9525af514
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    private User() {
-    	
-    }
     @Column(unique = true)
     private String loginId;
     private String nickname;
