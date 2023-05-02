@@ -26,9 +26,8 @@
 
 # 2. E-R Diagram 
  
-
-
-
+![E-R다이어그램](./image.png)
 
   
   
+# 2. Class Diagram 
