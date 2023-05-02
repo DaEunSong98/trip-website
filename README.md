@@ -24,10 +24,14 @@
 
 
 
-# 2. E-R Diagram 
+# 2 -1. E-R Diagram 
  
 ![E-R다이어그램](./image.png)
 
   
   
-# 2. Class Diagram 
+# 2 -2. Class Diagram 
+
+
+# 3. 기능 동작(PostMan)
+https://documenter.getpostman.com/view/27109759/2s93eU2uVJ
