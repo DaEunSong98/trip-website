@@ -1,16 +1,12 @@
 package com.ssafy.enjoytrip.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
-@Builder
 @Entity
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseTimeEntity {
 
     @Id
@@ -21,14 +17,23 @@ public class Board extends BaseTimeEntity {
 
     private String title;
 
-    private Board() {
-    	
-    }
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder
+    public Board(Long boardId, String content, String title, User user) {
+        this.boardId = boardId;
+        this.content = content;
+        this.title = title;
+        this.user = user;
+    }
+
     public void updateBoard(String content) {
         this.content = content;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

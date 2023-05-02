@@ -27,6 +27,7 @@ import com.ssafy.enjoytrip.session.LoginSessionInfo;
 @RequestMapping("/user")
 public class UserController {
 
+<<<<<<< HEAD
 	@Autowired
 	UserService userService;
 	
@@ -40,11 +41,10 @@ public class UserController {
 		
 		return new ResponseEntity<>( HttpStatus.OK); 
 	}
-	
-	//회원 가입 
+
+	//회원 가입
 	@PostMapping("/signup")
 	protected ResponseEntity<?> join(@RequestBody User user){
-		
 		userService.join(user);
 		return new ResponseEntity<>(HttpStatus.OK); 
 		
@@ -80,7 +80,14 @@ public class UserController {
 		session.setAttribute("login_member",null);
 		session.invalidate();
 		return new ResponseEntity<>(HttpStatus.OK); 
+
 	}
 
-		
+	//로그 아웃
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(){
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
 }

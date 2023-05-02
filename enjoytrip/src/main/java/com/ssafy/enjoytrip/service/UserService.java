@@ -13,4 +13,6 @@ public interface UserService {
     void join(User user);
 
     void updateUser(User user);
+
+    void deleteUser(Long userId);
 }
