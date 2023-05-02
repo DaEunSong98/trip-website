@@ -1,4 +1,4 @@
-# EnjoyTrip_FrontEnd_서울_11_송다은_오승진
+# EnjoyTrip_Spring_서울_11_송다은_최지원
 
 
 # 팀원 소개
