@@ -32,6 +32,8 @@
   
 # 2 -2. Class Diagram 
 
+![enjoytrip_classDiagram](/uploads/8ea457f7b67e185b2d357018f8533899/enjoytrip_classDiagram.png)
+
 
 # 3. 기능 동작(PostMan)
 https://documenter.getpostman.com/view/27109759/2s93eU2uVJ
