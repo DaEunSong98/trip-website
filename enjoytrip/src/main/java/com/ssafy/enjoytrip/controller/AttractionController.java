@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,24 +20,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/attraction")
+@RequiredArgsConstructor
 public class AttractionController{
-	
-	@Autowired
-	AttractionService attractionService;
-	
+
+	private final AttractionService attractionService;
+
 	//목록 조회
 	@GetMapping("/search")
 	protected ResponseEntity<?> getAttractionList(@ModelAttribute AttractionSearch attractionSearch) {
-		
-		log.info("call AttractionController = {}, {}, {}", attractionSearch.getTitle(), attractionSearch.getContentTypeId(), attractionSearch.getPage());
-		
-		List<AttractionInfo> list=attractionService.getAllAttraction(attractionSearch);
-		
-		return new ResponseEntity<List<AttractionInfo>>(list, HttpStatus.OK); 
-	}
-	
-	
 
-	
+		log.info("call AttractionController = {}, {}, {}", attractionSearch.getTitle(), attractionSearch.getContentTypeId(), attractionSearch.getPage());
+
+		List<AttractionInfo> list=attractionService.getAllAttraction(attractionSearch);
+
+		return new ResponseEntity<List<AttractionInfo>>(list, HttpStatus.OK);
+	}
+
 
 }
