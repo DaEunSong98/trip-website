@@ -1,7 +1,8 @@
 package com.ssafy.enjoytrip.controller;
 
-import com.ssafy.enjoytrip.domain.Board;
-import com.ssafy.enjoytrip.dto.request.BoardSearch;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,51 +14,79 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import com.ssafy.enjoytrip.domain.Board;
+import com.ssafy.enjoytrip.dto.request.BoardSearch;
+import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
+import com.ssafy.enjoytrip.service.BoardService;
+
 @RequestMapping("/board")
+@RestController
 public class BoardController {
 	
-	//게시글 세부 정보 
-	@GetMapping("/{board_id}")
-	protected ResponseEntity<?> getBoardDetail(@PathVariable long board_id) throws Exception {
+	@Autowired 
+	BoardService boardService;
 	
-		return new ResponseEntity<>(HttpStatus.OK); 
+	//게시글 세부 정보 
+	@GetMapping("/{boardId}")
+	protected ResponseEntity<?> getBoardDetail(@PathVariable("boardId") long boardId) throws Exception {
+		
+		Board board=boardService.getBoardDetail(boardId);
+		return new ResponseEntity<Board>(board,HttpStatus.OK); 
 	}
 	
 	//게시글 목록
 	@GetMapping
-	protected ResponseEntity<?> getBoardList() throws Exception {
-		
-		return new ResponseEntity<>(HttpStatus.OK); 
+	protected ResponseEntity<?> getBoardList(BoardSearch boardSearch) throws Exception {
+		System.out.println(boardSearch.getSize()+" "+boardSearch.getOffset());
+		List<Board> boardList=boardService.getAllBoards(boardSearch);
+		return new ResponseEntity<List<Board>>(boardList, HttpStatus.OK); 
 	
 	}
 
 	//게시글 등록
 	@PostMapping("/write")
 	protected ResponseEntity<?> registBoard(@RequestBody Board board) throws Exception {
-	
-		return new ResponseEntity<>(HttpStatus.OK); 
+
+		try{
+			boardService.addBoard(board);
+			return new ResponseEntity<>(HttpStatus.OK); 
+		}
+		catch(Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
 	}
 	
 	//게시글 수정 
 	@PutMapping("/{board_id}")
-	protected ResponseEntity<?> modifyBoard(@PathVariable long board_id, @RequestBody Board board) throws Exception {
+	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody BoardUpdateDto boardUpdateDto) throws Exception {
 
-		return new ResponseEntity<>(HttpStatus.OK); 
-
+		try{
+			boardService.updateBoard(boardUpdateDto);
+			return new ResponseEntity<>(HttpStatus.OK); 
+		}
+		catch(Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 	
 	//게시글 삭제
 	@DeleteMapping("/{board_id}")
-	protected ResponseEntity<?> deleteBoard(@PathVariable long board_id) throws Exception {
-		return new ResponseEntity<>(HttpStatus.OK); 
-	}
-
-	//게시글 검색 내용 조회 
-	protected ResponseEntity<?> search(@RequestBody BoardSearch boardSearch){
+	protected ResponseEntity<?> deleteBoard(@PathVariable long boardId) throws Exception {
 		
-		return new ResponseEntity<>(HttpStatus.OK); 
+
+		try{
+			boardService.deleteBoard(boardId);
+			return new ResponseEntity<>(HttpStatus.OK); 
+		}
+		catch(Exception e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 	}
+	
 	
 	
 }
