@@ -1,5 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 
+import com.ssafy.enjoytrip.domain.Board;
+import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,9 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.ssafy.enjoytrip.dto.Board;
-import com.ssafy.enjoytrip.dto.SearchDto;
 
 @RestController
 @RequestMapping("/board")
@@ -55,7 +54,7 @@ public class BoardController {
 	}
 
 	//게시글 검색 내용 조회 
-	protected ResponseEntity<?> search(@RequestBody SearchDto dto){
+	protected ResponseEntity<?> search(@RequestBody BoardSearch boardSearch){
 		
 		return new ResponseEntity<>(HttpStatus.OK); 
 	}
