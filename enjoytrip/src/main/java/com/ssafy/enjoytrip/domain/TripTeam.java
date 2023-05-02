@@ -8,10 +8,10 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Entity
-public class TripTeam {
+public class TripTeam extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tripTeamId;
     private String teamName;
 

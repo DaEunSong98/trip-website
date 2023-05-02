@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class AttractionDescription {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int contentId;
 	private String hompage;
 	private String overview;

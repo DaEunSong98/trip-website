@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Entity
-public class UserRelationship {
+public class UserRelationship extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userRelationshipId;
 
     @ManyToOne(fetch = FetchType.LAZY)

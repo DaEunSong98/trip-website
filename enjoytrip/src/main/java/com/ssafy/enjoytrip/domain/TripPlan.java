@@ -3,10 +3,10 @@ package com.ssafy.enjoytrip.domain;
 import javax.persistence.*;
 
 @Entity
-public class TripPlan {
+public class TripPlan extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tripPlanId;
     private String planContent;
     private String planName;

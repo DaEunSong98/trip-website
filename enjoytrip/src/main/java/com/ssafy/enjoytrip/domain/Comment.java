@@ -8,9 +8,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
-public class Comment {
+public class Comment extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
     private String content;
 

@@ -14,7 +14,7 @@ import javax.persistence.Id;
 public class Sido {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int sidoCode;
 	private String sidoName;
 	

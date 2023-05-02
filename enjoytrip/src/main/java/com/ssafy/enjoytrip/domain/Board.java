@@ -8,10 +8,10 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Entity
-public class Board {
+public class Board extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardId;
 
     private String content;
@@ -21,4 +21,8 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void updateBoard(String content) {
+        this.content = content;
+    }
 }

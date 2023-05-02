@@ -11,9 +11,9 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Entity
-public class PlanAttraction {
+public class PlanAttraction extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long planAttractionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
