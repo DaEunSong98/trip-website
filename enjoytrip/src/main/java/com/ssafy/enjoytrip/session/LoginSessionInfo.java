@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class LoginSessionInfo {
+	
     private Long userId;
     private String nickName;
+
 }

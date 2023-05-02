@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.domain;
 
+
 import lombok.Getter;
 
 import javax.persistence.*;
