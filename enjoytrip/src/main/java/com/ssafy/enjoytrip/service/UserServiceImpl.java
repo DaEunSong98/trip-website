@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException("잘못된 접근입니다."));
         findUser.updateUser(user);
     }
+
+    @Override
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
