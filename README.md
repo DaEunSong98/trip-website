@@ -25,9 +25,9 @@
 
 
 # 2 -1. E-R Diagram 
- 
-![E-R다이어그램](./image.png)
 
+
+![enjoytrip_E-R Diagram](/uploads/914595acaebbba575decb60c91799f52/jjinmakerd.png)
   
   
 # 2 -2. Class Diagram 
