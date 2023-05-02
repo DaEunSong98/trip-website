@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.controller;
 
 import java.util.List;
 
+import com.ssafy.enjoytrip.session.LoginSessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.service.BoardService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RequestMapping("/board")
 @RestController
@@ -45,10 +49,11 @@ public class BoardController {
 
 	//게시글 등록
 	@PostMapping("/write")
-	protected ResponseEntity<?> registBoard(@RequestBody Board board) throws Exception {
-
+	protected ResponseEntity<?> registBoard(@RequestBody Board board, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		LoginSessionInfo loginMember = (LoginSessionInfo) session.getAttribute("LoginMember");
 		try{
-			boardService.addBoard(board);
+			boardService.addBoard(board, loginMember.getUserId());
 			return new ResponseEntity<>(HttpStatus.OK); 
 		}
 		catch(Exception e){

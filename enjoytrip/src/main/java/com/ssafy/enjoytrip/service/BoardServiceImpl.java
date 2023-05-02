@@ -1,10 +1,12 @@
 package com.ssafy.enjoytrip.service;
 
 import com.ssafy.enjoytrip.domain.Board;
+import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.exception.BoardException;
 import com.ssafy.enjoytrip.repository.BoardRepository;
+import com.ssafy.enjoytrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +42,10 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void addBoard(Board board) {
+    public void addBoard(Board board, Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new BoardException("잘못된 접근입니다."));
+        board.setUser(findUser);
         boardRepository.save(board);
     }
 
