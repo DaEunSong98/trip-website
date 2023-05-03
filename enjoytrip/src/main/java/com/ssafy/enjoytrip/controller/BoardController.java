@@ -33,7 +33,6 @@ public class BoardController {
 		Board board = boardService.getBoardDetail(boardId);
 		return new ResponseEntity<>(board, HttpStatus.OK);
 	}
-	
 
 	//게시글 목록
 	@GetMapping
@@ -47,7 +46,6 @@ public class BoardController {
 	public ResponseEntity<?> registerBoard(@RequestBody Board board, HttpServletRequest request) {
 		HttpSession session = request.getSession(); // TODO: 2023-05-03 여기 세션 정보 없으면 예외 던지게 설계하기 + JWT 추가할 때 다시 구현
 		LoginSessionInfo loginMember = (LoginSessionInfo) session.getAttribute("LoginMember");
-		System.out.println(loginMember.getNickName());
 		boardService.addBoard(board, loginMember.getUserId());
 		return new ResponseEntity<>(HttpStatus.OK);
 
@@ -67,9 +65,10 @@ public class BoardController {
 		return ResponseEntity.ok().build();
 	}
 
-// board exception handler
+	// board exception handler
 	@ExceptionHandler(BoardException.class)
 	public ResponseEntity<String> boardExceptionHandle(BoardException e) {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
+
 }
