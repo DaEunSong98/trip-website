@@ -2,12 +2,10 @@ package com.ssafy.enjoytrip.controller;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +29,7 @@ public class AttractionController{
 
 		log.info("call AttractionController = {}, {}, {}", attractionSearch.getTitle(), attractionSearch.getContentTypeId(), attractionSearch.getPage());
 
-		List<AttractionInfo> list=attractionService.getAllAttraction(attractionSearch);
+		List<AttractionInfo> list = attractionService.getAllAttraction(attractionSearch);
 
 		return new ResponseEntity<List<AttractionInfo>>(list, HttpStatus.OK);
 	}
