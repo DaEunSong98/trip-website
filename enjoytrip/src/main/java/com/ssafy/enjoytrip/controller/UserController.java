@@ -25,26 +25,25 @@ public class UserController {
 
 	//로그인
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request){
+	public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
 		LoginSessionInfo loginSessionInfo = userService.loginUser(userLoginDto.getLoginId(), userLoginDto.getPassword());
-		session.setAttribute(LoginSessionConst.LOGIN_SESSION, loginSessionInfo );
+		session.setAttribute(LoginSessionConst.LOGIN_SESSION, loginSessionInfo);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//회원 가입
 	@PostMapping("/signup")
-	public ResponseEntity<?> join(@RequestBody User user){
+	public ResponseEntity<?> join(@RequestBody User user) {
 		userService.join(user);
 		return new ResponseEntity<>(HttpStatus.OK);
-
 	}
 
 	//회원 정보 수정
 	@PatchMapping("/{userId}")
-	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UserUpdateDto userUpdateDto){
+	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UserUpdateDto userUpdateDto) {
 		User user = userUpdateDto.toEntity();
 		userService.updateUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -70,7 +69,7 @@ public class UserController {
 
 	//로그 아웃
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(HttpServletRequest request){
+	public ResponseEntity<?> logout(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		session.invalidate();
 		return new ResponseEntity<>(HttpStatus.OK);
