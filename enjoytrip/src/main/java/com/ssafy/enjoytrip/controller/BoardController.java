@@ -3,6 +3,9 @@ package com.ssafy.enjoytrip.controller;
 import java.util.List;
 
 import com.ssafy.enjoytrip.session.LoginSessionInfo;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +41,13 @@ public class BoardController {
 		return new ResponseEntity<Board>(board,HttpStatus.OK); 
 	}
 	
+	
 	//게시글 목록
 	@GetMapping
 	protected ResponseEntity<?> getBoardList(BoardSearch boardSearch) throws Exception {
-		System.out.println(boardSearch.getSize()+" "+boardSearch.getOffset());
+		System.out.println(boardSearch.getSearchString()+" ");
+		System.out.println(boardSearch.getPage());
+		System.out.println(boardSearch.getSize());
 		List<Board> boardList=boardService.getAllBoards(boardSearch);
 		return new ResponseEntity<List<Board>>(boardList, HttpStatus.OK); 
 	
@@ -52,14 +58,10 @@ public class BoardController {
 	protected ResponseEntity<?> registBoard(@RequestBody Board board, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		LoginSessionInfo loginMember = (LoginSessionInfo) session.getAttribute("LoginMember");
-		try{
-			boardService.addBoard(board, loginMember.getUserId());
-			return new ResponseEntity<>(HttpStatus.OK); 
-		}
-		catch(Exception e){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		System.out.println(loginMember.getNickName());
 		
+		boardService.addBoard(board, loginMember.getUserId());
+		return new ResponseEntity<>(HttpStatus.OK); 
 		
 	}
 	

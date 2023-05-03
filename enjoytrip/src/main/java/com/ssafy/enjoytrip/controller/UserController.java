@@ -27,7 +27,6 @@ import com.ssafy.enjoytrip.session.LoginSessionInfo;
 @RequestMapping("/user")
 public class UserController {
 
-<<<<<<< HEAD
 	@Autowired
 	UserService userService;
 	
@@ -83,11 +82,6 @@ public class UserController {
 
 	}
 
-	//로그 아웃
-	@PostMapping("/logout")
-	public ResponseEntity<?> logout(){
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 
 
 }

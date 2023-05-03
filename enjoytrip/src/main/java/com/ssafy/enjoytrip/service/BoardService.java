@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface BoardService {
+	
     Board getBoardDetail(Long boardId);
 
     List<Board> getAllBoards(BoardSearch boardSearch);
