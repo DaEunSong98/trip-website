@@ -25,6 +25,7 @@ class UserServiceImplTest {
 
     @Test
     @Transactional
+    @DisplayName("유저 조회 테스트")
     void findUserById() {
         User user = User.builder().loginId("Hello").password("hello2").nickname("안녕").build();
         userService.join(user);
@@ -57,12 +58,15 @@ class UserServiceImplTest {
 
     @Test
     @Transactional
+    @DisplayName("회원 가입 테스트")
     void join() {
         User user = User.builder().loginId("Hello").password("hello2").nickname("안녕").build();
         userService.join(user);
     }
 
     @Test
+    @Transactional
+    @DisplayName("회원 정보 수정 테스트")
     void updateUser() {
         User user = User.builder().loginId("Hello").password("hello2").nickname("안녕").build();
         userService.join(user);

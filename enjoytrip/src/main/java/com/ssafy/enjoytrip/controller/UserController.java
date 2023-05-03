@@ -4,9 +4,9 @@ package com.ssafy.enjoytrip.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,69 +19,69 @@ import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.UserLoginDto;
 import com.ssafy.enjoytrip.dto.request.UserUpdateDto;
 import com.ssafy.enjoytrip.service.UserService;
+import com.ssafy.enjoytrip.session.LoginSessionConst;
 import com.ssafy.enjoytrip.session.LoginSessionInfo;
 
-
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
-	@Autowired
-	UserService userService;
-	
-	//로그인 
-	@PostMapping("/login")
-	protected ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request){
+	private final UserService userService;
 
-		HttpSession session=request.getSession();
-		LoginSessionInfo loginSessionInfo=userService.loginUser(userLoginDto.getLoginId(), userLoginDto.getPassword());
-		session.setAttribute("login_member",loginSessionInfo );
-		
-		return new ResponseEntity<>( HttpStatus.OK); 
+
+	//로그인
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		LoginSessionInfo loginSessionInfo = userService.loginUser(userLoginDto.getLoginId(), userLoginDto.getPassword());
+		session.setAttribute(LoginSessionConst.LOGIN_SESSION, loginSessionInfo);
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//회원 가입
 	@PostMapping("/signup")
-	protected ResponseEntity<?> join(@RequestBody User user){
+	public ResponseEntity<?> join(@RequestBody User user) {
 		userService.join(user);
-		return new ResponseEntity<>(HttpStatus.OK); 
-		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	//회원 정보 수정 
+
+	//회원 정보 수정
 	@PatchMapping("/{userId}")
-	protected ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UserUpdateDto userUpdateDto){
-		User user=userUpdateDto.toEntity();
+	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UserUpdateDto userUpdateDto) {
+		User user = userUpdateDto.toEntity();
 		userService.updateUser(user);
-		return new ResponseEntity<>(HttpStatus.OK); 
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	//회원 상세 정보 조회 
+
+	//회원 상세 정보 조회
 	@GetMapping("/{userId}")
-	protected ResponseEntity<?> getUserDetail(@PathVariable long userId){
-		
-		User user=userService.findUserById(userId);
-		return new ResponseEntity<User>(user, HttpStatus.OK); 
+	public ResponseEntity<User> getUserDetail(@PathVariable long userId){
+		User user = userService.findUserById(userId);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
-	
-//	//회원 정보 삭제(?)
-//	@DeleteMapping("/{user_id}")
-//	protected ResponseEntity<?> deleteUser(@PathVariable long user_id){
-//		userService.
-//		return new ResponseEntity<>(HttpStatus.OK); 
-//	}
-	
-	//로그 아웃 
-	@PostMapping("/logout")
-	public ResponseEntity<?> logout(HttpServletRequest request){
-		HttpSession session=request.getSession();
-		session.setAttribute("login_member",null);
+
+	//회원 정보 삭제
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteUser(HttpServletRequest request){
+		// TODO: 2023-05-03 로그인 JWT 토큰 기반으로 변경 시 리팩토링 하기
+		HttpSession session = request.getSession();
+		LoginSessionInfo loginSession = (LoginSessionInfo) session.getAttribute(LoginSessionConst.LOGIN_SESSION);
+		userService.deleteUser(loginSession.getUserId());
 		session.invalidate();
-		return new ResponseEntity<>(HttpStatus.OK); 
-
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-
+	//로그 아웃
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.invalidate();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 }

@@ -23,4 +23,8 @@ public class UserTripTeam extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void addTripTeam(TripTeam tripTeam) {
+        this.tripTeam = tripTeam;
+    }
 }
