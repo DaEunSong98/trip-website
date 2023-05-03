@@ -2,22 +2,29 @@ package com.ssafy.enjoytrip.controller;
 
 import java.util.List;
 
-import com.ssafy.enjoytrip.exception.BoardException;
-import com.ssafy.enjoytrip.session.LoginSessionInfo;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
+import com.ssafy.enjoytrip.exception.BoardException;
 import com.ssafy.enjoytrip.service.BoardService;
+import com.ssafy.enjoytrip.session.LoginSessionInfo;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
@@ -52,14 +59,15 @@ public class BoardController {
 	}
 
 	//게시글 수정
-	@PutMapping("/{board_id}")
+	@PatchMapping("/{boardId}")
 	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody BoardUpdateDto boardUpdateDto) {
 		boardService.updateBoard(boardUpdateDto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	
 	//게시글 삭제
-	@DeleteMapping("/{board_id}")
+	@DeleteMapping("/{boardId}")
 	public ResponseEntity<?> deleteBoard(@PathVariable long boardId) {
 		boardService.deleteBoard(boardId);
 		return ResponseEntity.ok().build();

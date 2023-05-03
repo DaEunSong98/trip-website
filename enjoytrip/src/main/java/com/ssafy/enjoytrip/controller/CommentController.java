@@ -7,49 +7,57 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.Comment;
+import com.ssafy.enjoytrip.service.CommentService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/board")
+@RequiredArgsConstructor
 public class CommentController {
 
-	
+	private final CommentService commentService;
 		
 		//댓글 목록 
-		@GetMapping("/{board_id}/comments")
-		protected ResponseEntity<?> getComments(@PathVariable long board_id) throws Exception {
+		@GetMapping("/{boardId}/comments")
+		protected ResponseEntity<?> getComments(@PathVariable long boardId) throws Exception {
 			
-			return new ResponseEntity<List<Book>>(HttpStatus.OK); 
+			List<Comment> commentList=commentService.getAllComment(boardId);
+			return new ResponseEntity<List<Comment>>(commentList, HttpStatus.OK); 
 		
 		}
 
 		//댓글 등록
-		@PostMapping("{board_id}/comments/write")
-		protected ResponseEntity<?> registComment(@PathVariable long board_id,@RequestBody Board board) throws Exception {
-		
-			return new ResponseEntity<List<Book>>(HttpStatus.OK); 
+		@PostMapping("{boardId}/comments/write")
+		protected ResponseEntity<?> registComment(@PathVariable long boardId,@RequestBody Comment comment) throws Exception {
+			
+			commentService.addComment(comment);
+			return new ResponseEntity<>(HttpStatus.OK); 
 		}
 		
 		
 		//댓글 수정 
-		@PutMapping("{board_id}/comments/{comment_id}")
-		protected ResponseEntity<?> modifyBook(@PathVariable long board_id, @PathVariable long comment_id, @RequestBody Comment comment) throws Exception {
+		@PatchMapping("{boardId}/comments/{commentId}")
+		protected ResponseEntity<?> modifyComment(@PathVariable long boardId, @PathVariable long commentId, @RequestBody Comment comment) throws Exception {
 
+			commentService.editComment(commentId, comment.getContent());
 			return new ResponseEntity<List<Book>>(HttpStatus.OK); 
 
 		}
 		
 		//댓글 삭제 
-		@DeleteMapping("{board_id}/comments/{comment_id}")
-		protected ResponseEntity<?> deleteComment(@PathVariable long board_id, @PathVariable long comment_id) throws Exception {
+		@DeleteMapping("{boardId}/comments/{commentId}")
+		protected ResponseEntity<?> deleteComment(@PathVariable long boardId, @PathVariable long commentId) throws Exception {
+			
+			commentService.deleteComment(commentId);
 			return new ResponseEntity<List<Book>>(HttpStatus.OK); 
 		}
 		

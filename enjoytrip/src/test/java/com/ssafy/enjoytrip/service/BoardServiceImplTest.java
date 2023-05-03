@@ -74,4 +74,5 @@ class BoardServiceImplTest {
         List<Board> allBoards2 = boardService.getAllBoards(BoardSearch.builder().build());
         Assertions.assertThat(allBoards2.size()).isEqualTo(4);
     }
+    
 }
