@@ -7,7 +7,7 @@ import java.util.List;
 public interface CommentService {
     List<Comment> getAllComment(Long boardId);
 
-    void addComment(Comment comment);
+    void addComment(String content, Long boardId, Long userId);
 
     Comment getComment(Long commentId);
 

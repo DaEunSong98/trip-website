@@ -1,8 +1,12 @@
 package com.ssafy.enjoytrip.service;
 
+import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.Comment;
+import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.exception.CommentException;
+import com.ssafy.enjoytrip.repository.BoardRepository;
 import com.ssafy.enjoytrip.repository.CommentRepository;
+import com.ssafy.enjoytrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,8 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -25,14 +31,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void addComment(Comment comment) {
+    public void addComment(String content, Long boardId, Long userId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CommentException("잘못된 접근입니다"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommentException("잘못된 접근입니다."));
+        Comment comment = Comment.builder().content(content).board(board).user(user).build();
         commentRepository.save(comment);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Comment getComment(Long commentId) {
-        return commentRepository.findById(commentId)
+        return commentRepository.findCommentByIdUsingFetchJoin(commentId)
                 .orElseThrow(() -> new CommentException("잘못된 접근입니다."));
     }
 
