@@ -1,0 +1,20 @@
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== REQUEST
+
+include::{snippets}/test/http-request.adoc[]
+
+== RESPONSE
+
+include::{snippets}/test/http-response.adoc[]
+
+== REQUEST
+
+include::{snippets}/test/http-request.adoc[]
+
+== RESPONSE
+
+include::{snippets}/test/http-response.adoc[]
