@@ -1,6 +1,8 @@
 package com.ssafy.enjoytrip.controller;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.ssafy.enjoytrip.dto.response.AttractionListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +27,17 @@ public class AttractionController{
 
 	//목록 조회
 	@GetMapping("/search")
-	protected ResponseEntity<?> getAttractionList(@ModelAttribute AttractionSearch attractionSearch) {
+	protected ResponseEntity<List<AttractionListResponseDto>> getAttractionList(@ModelAttribute AttractionSearch attractionSearch) {
 
 		log.info("call AttractionController = {}, {}, {}", attractionSearch.getTitle(), attractionSearch.getContentTypeId(), attractionSearch.getPage());
 
 		List<AttractionInfo> list = attractionService.getAllAttraction(attractionSearch);
 
-		return new ResponseEntity<List<AttractionInfo>>(list, HttpStatus.OK);
-	}
+		List<AttractionListResponseDto> responseList = list.stream()
+				.map(o1 -> new AttractionListResponseDto(o1.getContentTypeId(), o1.getContentId(), o1.getTitle(), o1.getAddr1(), o1.getAddr2(), o1.getZipcode(), o1.getFirstImage(), o1.getFirstImage2(), o1.getSido().getSidoName(), o1.getGugun().getGugunName()))
+				.collect(Collectors.toList());
 
+		return new ResponseEntity<>(responseList, HttpStatus.OK);
+	}
 
 }
