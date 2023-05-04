@@ -25,40 +25,40 @@ import lombok.RequiredArgsConstructor;
 public class CommentController {
 
 	private final CommentService commentService;
-		
-		//댓글 목록 
-		@GetMapping("/{boardId}/comments")
-		protected ResponseEntity<?> getComments(@PathVariable long boardId) throws Exception {
-			
-			List<Comment> commentList=commentService.getAllComment(boardId);
-			return new ResponseEntity<List<Comment>>(commentList, HttpStatus.OK); 
-		
-		}
 
-		//댓글 등록
-		@PostMapping("{boardId}/comments/write")
-		protected ResponseEntity<?> registComment(@PathVariable long boardId,@RequestBody Comment comment) throws Exception {
-			
-			commentService.addComment(comment);
-			return new ResponseEntity<>(HttpStatus.OK); 
-		}
-		
-		
-		//댓글 수정 
-		@PatchMapping("{boardId}/comments/{commentId}")
-		protected ResponseEntity<?> modifyComment(@PathVariable long boardId, @PathVariable long commentId, @RequestBody Comment comment) throws Exception {
+	//댓글 목록 
+	@GetMapping("/{boardId}/comments")
+	protected ResponseEntity<?> getComments(@PathVariable long boardId) throws Exception {
 
-			commentService.editComment(commentId, comment.getContent());
-			return new ResponseEntity<List<Book>>(HttpStatus.OK); 
+		List<Comment> commentList=commentService.getAllComment(boardId);
+		return new ResponseEntity<List<Comment>>(commentList, HttpStatus.OK);
 
-		}
-		
-		//댓글 삭제 
-		@DeleteMapping("{boardId}/comments/{commentId}")
-		protected ResponseEntity<?> deleteComment(@PathVariable long boardId, @PathVariable long commentId) throws Exception {
-			
-			commentService.deleteComment(commentId);
-			return new ResponseEntity<List<Book>>(HttpStatus.OK); 
-		}
-		
+	}
+
+	//댓글 등록
+	@PostMapping("{boardId}/comments/write")
+	protected ResponseEntity<?> registComment(@PathVariable long boardId,@RequestBody Comment comment) throws Exception {
+		Long userId = 1L; // TODO: 2023-05-04 유저 id JWT 토큰에서 가져오기
+		commentService.addComment(comment.getContent(), boardId, userId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
+	//댓글 수정 
+	@PatchMapping("{boardId}/comments/{commentId}")
+	protected ResponseEntity<?> modifyComment(@PathVariable long boardId, @PathVariable long commentId, @RequestBody Comment comment) throws Exception {
+
+		commentService.editComment(commentId, comment.getContent());
+		return new ResponseEntity<List<Book>>(HttpStatus.OK);
+
+	}
+
+	//댓글 삭제 
+	@DeleteMapping("{boardId}/comments/{commentId}")
+	protected ResponseEntity<?> deleteComment(@PathVariable long boardId, @PathVariable long commentId) throws Exception {
+
+		commentService.deleteComment(commentId);
+		return new ResponseEntity<List<Book>>(HttpStatus.OK);
+	}
+
 }
