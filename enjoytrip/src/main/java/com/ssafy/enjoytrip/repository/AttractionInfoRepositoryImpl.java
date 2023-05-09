@@ -3,16 +3,12 @@ package com.ssafy.enjoytrip.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.enjoytrip.domain.AttractionInfo;
-import com.ssafy.enjoytrip.domain.QAttractionInfo;
-import com.ssafy.enjoytrip.domain.QGugun;
-import com.ssafy.enjoytrip.domain.QSido;
 import com.ssafy.enjoytrip.dto.request.AttractionSearch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ssafy.enjoytrip.domain.QAttractionInfo.*;
 import static com.ssafy.enjoytrip.domain.QGugun.*;
@@ -38,7 +34,7 @@ public class AttractionInfoRepositoryImpl implements AttractionInfoRepositoryCus
                 .where(builder.and(gugun.sido.eq(sido)))
                 .limit(attractionSearch.getSize())
                 .offset(attractionSearch.getOffset())
-                .orderBy(attractionInfo.title.asc())
+                .orderBy(attractionInfo.title.asc().nullsLast())
                 .fetch();
     }
 
