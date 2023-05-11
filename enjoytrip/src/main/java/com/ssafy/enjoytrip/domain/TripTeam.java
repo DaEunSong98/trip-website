@@ -20,18 +20,13 @@ public class TripTeam extends BaseTimeEntity {
 
     private String teamName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User master;
-
     @OneToMany(mappedBy = "tripTeam", cascade = CascadeType.ALL)
     private List<UserTripTeam> userTripTeams = new ArrayList<>();
 
     @Builder
-    public TripTeam(Long tripTeamId, String teamName, User master) {
+    public TripTeam(Long tripTeamId, String teamName) {
         this.tripTeamId = tripTeamId;
         this.teamName = teamName;
-        this.master = master;
     }
 
     // 연관 관계 편의 메서드

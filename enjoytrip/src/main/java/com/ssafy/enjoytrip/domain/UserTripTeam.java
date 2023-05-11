@@ -1,7 +1,7 @@
 package com.ssafy.enjoytrip.domain;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.ssafy.enjoytrip.domain.team_relation.TeamRole;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,7 +11,10 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Entity
-public class UserTripTeam extends BaseTimeEntity{
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class UserTripTeam extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userTripTeamId;
@@ -23,6 +26,11 @@ public class UserTripTeam extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private TeamRole teamRole; // LEADER, MEMBER
+
+    private boolean accepted; // 초대 수락 여부 (true: 수락, false: 대기)
 
     public void addTripTeam(TripTeam tripTeam) {
         this.tripTeam = tripTeam;

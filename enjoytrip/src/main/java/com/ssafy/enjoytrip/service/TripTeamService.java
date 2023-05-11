@@ -7,5 +7,5 @@ public interface TripTeamService {
 
     TripTeam findTripTeam(Long tripTeamId);
 
-    void addTeamMember(Long userId, Long teamId);
+    void inviteUser(Long userId, Long teamId);
 }
