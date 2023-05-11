@@ -33,7 +33,7 @@ class AttractionControllerRestDocTest {
     @Test
     @DisplayName("여행지 조회")
     void test1() throws Exception {
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/attraction/search"))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/attraction/search?title=산"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcRestDocumentation.document("test"));
