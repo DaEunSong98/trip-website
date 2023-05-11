@@ -27,7 +27,7 @@ public class AttractionController{
 
 	//목록 조회
 	@GetMapping("/search")
-	protected ResponseEntity<List<AttractionListResponseDto>> getAttractionList(@ModelAttribute AttractionSearch attractionSearch) {
+	protected ResponseEntity<List<AttractionListResponseDto>> getAttractionList(AttractionSearch attractionSearch) {
 
 		log.info("call AttractionController = {}, {}, {}", attractionSearch.getTitle(), attractionSearch.getContentTypeId(), attractionSearch.getPage());
 
