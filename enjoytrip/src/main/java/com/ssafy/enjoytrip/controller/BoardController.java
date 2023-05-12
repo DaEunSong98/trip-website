@@ -5,17 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.ssafy.enjoytrip.domain.image_util.FileStore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
@@ -25,6 +18,7 @@ import com.ssafy.enjoytrip.service.BoardService;
 import com.ssafy.enjoytrip.session.LoginSessionInfo;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -33,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardService boardService;
+
+	private final FileStore fileStore;
 
 	//게시글 세부 정보
 	@GetMapping("/{boardId}")
@@ -50,7 +46,7 @@ public class BoardController {
 
 	//게시글 등록
 	@PostMapping("/write")
-	public ResponseEntity<?> registerBoard(@RequestBody Board board, HttpServletRequest request) {
+	public ResponseEntity<?> registerBoard(@RequestBody Board board, @RequestParam(value = "images", required = false) List<MultipartFile> images, HttpServletRequest request) {
 		HttpSession session = request.getSession(); // TODO: 2023-05-03 여기 세션 정보 없으면 예외 던지게 설계하기 + JWT 추가할 때 다시 구현
 		LoginSessionInfo loginMember = (LoginSessionInfo) session.getAttribute("LoginMember");
 		boardService.addBoard(board, loginMember.getUserId());
@@ -65,7 +61,7 @@ public class BoardController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
+
 	//게시글 삭제
 	@DeleteMapping("/{boardId}")
 	public ResponseEntity<?> deleteBoard(@PathVariable long boardId) {

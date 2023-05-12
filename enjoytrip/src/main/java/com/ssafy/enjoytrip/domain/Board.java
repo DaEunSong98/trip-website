@@ -3,6 +3,8 @@ package com.ssafy.enjoytrip.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -20,6 +22,9 @@ public class Board extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<BoardImage> boardImages = new ArrayList<>();
 
     @Builder
     public Board(Long boardId, String content, String title, User user) {

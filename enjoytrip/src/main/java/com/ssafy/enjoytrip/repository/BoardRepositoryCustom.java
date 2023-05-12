@@ -8,6 +8,9 @@ import java.util.Optional;
 
 public interface BoardRepositoryCustom {
 
+    /**
+     * 게시판 정보 조회 ->
+     */
     List<Board> searchAllBoard(BoardSearch boardSearch);
 
     Optional<Board> findBoardByBoardId(Long boardId);
