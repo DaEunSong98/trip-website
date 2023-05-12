@@ -1,4 +1,4 @@
-package com.ssafy.enjoytrip.domain.image_util;
+package com.ssafy.enjoytrip.image_util;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
 import org.springframework.beans.factory.annotation.Value;
