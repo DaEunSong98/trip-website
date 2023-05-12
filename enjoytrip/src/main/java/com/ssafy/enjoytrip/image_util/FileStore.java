@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.image_util;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
+import com.ssafy.enjoytrip.exception.NotImageException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,9 +30,13 @@ public class FileStore {
         List<BoardImage> imageResult = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFiles) {
-            if (!multipartFiles.isEmpty()) {
-                imageResult.add(storeImage(multipartFile));
+            if (multipartFile.isEmpty()) {
+                continue;
             }
+            if (!multipartFile.getContentType().contains("image")) {
+                throw new NotImageException("이미지 파일을 넣어주세요");
+            }
+            imageResult.add(storeImage(multipartFile));
         }
 
         return imageResult;
