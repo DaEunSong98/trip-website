@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.service;
 
 import com.ssafy.enjoytrip.domain.User;
+import com.ssafy.enjoytrip.dto.request.UserSearch;
 import com.ssafy.enjoytrip.exception.LoginException;
 import com.ssafy.enjoytrip.exception.UserException;
 import com.ssafy.enjoytrip.repository.UserRepository;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,6 +26,12 @@ public class UserServiceImpl implements UserService {
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserException("잘못된 접근입니다."));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findAllUser(UserSearch userSearch) {
+        return userRepository.searchAllUser(userSearch);
     }
 
     @Override
