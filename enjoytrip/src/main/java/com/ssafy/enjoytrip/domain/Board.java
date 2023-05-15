@@ -41,4 +41,12 @@ public class Board extends BaseTimeEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
+    /**
+     * 연관 관계 편의 메서드
+     */
+    public void addImage(BoardImage boardImage) {
+        boardImages.add(boardImage);
+        boardImage.addBoard(this);
+    }
 }

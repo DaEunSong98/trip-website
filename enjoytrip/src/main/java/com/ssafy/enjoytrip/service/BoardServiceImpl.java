@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.service;
 
 import com.ssafy.enjoytrip.domain.Board;
+import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
@@ -21,6 +22,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+
     private final UserRepository userRepository;
 
     @Override
@@ -42,10 +44,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void addBoard(Board board, Long userId) {
+    public void addBoard(Board board, Long userId, List<BoardImage> boardImages) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BoardException("잘못된 접근입니다."));
+
         board.setUser(findUser);
+        for (BoardImage boardImage : boardImages) {
+            board.addImage(boardImage);
+        }
+
         boardRepository.save(board);
     }
 

@@ -15,8 +15,6 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class BoardServiceImplTest {
 
@@ -42,7 +40,7 @@ class BoardServiceImplTest {
     void test1() {
         // given
         Board board = Board.builder().title("테스트1").content("테스트1").build();
-        boardService.addBoard(board, userId);
+        boardService.addBoard(board, userId, boardImages);
         em.flush();
 
         // when
@@ -58,13 +56,13 @@ class BoardServiceImplTest {
     @Transactional
     void test2() {
         Board board = Board.builder().title("테스트1").content("테스트1").build();
-        boardService.addBoard(board, userId);
+        boardService.addBoard(board, userId, boardImages);
         Board board1 = Board.builder().title("테스트2").content("테스트2").build();
-        boardService.addBoard(board1, userId);
+        boardService.addBoard(board1, userId, boardImages);
         Board board2 = Board.builder().title("테스트3").content("테스트3").build();
-        boardService.addBoard(board2, userId);
+        boardService.addBoard(board2, userId, boardImages);
         Board board3 = Board.builder().title("테스트4").content("테스트4").build();
-        boardService.addBoard(board3, userId);
+        boardService.addBoard(board3, userId, boardImages);
 
         em.flush();
 
