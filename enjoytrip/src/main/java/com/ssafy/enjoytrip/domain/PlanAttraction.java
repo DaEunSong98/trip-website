@@ -25,6 +25,6 @@ public class PlanAttraction extends BaseTimeEntity {
     private TripPlan tripPlan;
 
     public void addTripPlan(TripPlan tripPlan){
-        this.tripPlan=tripPlan;
+        this.tripPlan = tripPlan;
     }
 }

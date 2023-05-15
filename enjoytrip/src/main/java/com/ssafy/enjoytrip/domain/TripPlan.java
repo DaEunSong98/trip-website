@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Builder
+@Getter
 public class TripPlan extends BaseTimeEntity {
 
     @Id
@@ -16,7 +18,7 @@ public class TripPlan extends BaseTimeEntity {
     private String planContent;
     private String planName;
 
-    @OneToMany(mappedBy = "attraction_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tripPlan", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,5 +28,9 @@ public class TripPlan extends BaseTimeEntity {
     public void addPlanAttraction(PlanAttraction planAttraction){
         planAttractions.add(planAttraction);
         planAttraction.addTripPlan(this);
+    }
+
+    public void addTripTeam(TripTeam tripTeam) {
+        this.tripTeam = tripTeam;
     }
 }

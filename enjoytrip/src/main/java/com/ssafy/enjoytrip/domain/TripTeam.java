@@ -23,6 +23,9 @@ public class TripTeam extends BaseTimeEntity {
     @OneToMany(mappedBy = "tripTeam", cascade = CascadeType.ALL)
     private List<UserTripTeam> userTripTeams = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tripTeam", cascade = CascadeType.ALL)
+    private List<TripPlan> tripPlans = new ArrayList<>();
+
     @Builder
     public TripTeam(Long tripTeamId, String teamName) {
         this.tripTeamId = tripTeamId;
@@ -33,5 +36,10 @@ public class TripTeam extends BaseTimeEntity {
     public void addUserTripTeam(UserTripTeam userTripTeam) {
         userTripTeams.add(userTripTeam);
         userTripTeam.addTripTeam(this);
+    }
+
+    public void addTripPlans(TripPlan tripPlan) {
+        tripPlans.add(tripPlan);
+        tripPlan.addTripTeam(this);
     }
 }
