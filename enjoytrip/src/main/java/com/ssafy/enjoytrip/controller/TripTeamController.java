@@ -2,9 +2,11 @@ package com.ssafy.enjoytrip.controller;
 
 import com.ssafy.enjoytrip.domain.TripTeam;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
+import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
 import com.ssafy.enjoytrip.dto.request.UserInviteDto;
 import com.ssafy.enjoytrip.dto.response.TripTeamResponseDto;
 import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
+import com.ssafy.enjoytrip.repository.PlanAttractionRepository;
 import com.ssafy.enjoytrip.service.TripPlanService;
 import com.ssafy.enjoytrip.service.TripTeamService;
 import com.ssafy.enjoytrip.session.LoginSessionInfo;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -26,6 +29,8 @@ public class TripTeamController {
     private final TripTeamService tripTeamService;
 
     private final TripPlanService tripPlanService;
+
+    private final PlanAttractionRepository planAttractionRepository;
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.OK)
@@ -94,4 +99,29 @@ public class TripTeamController {
         return "팀 해체가 완료되었습니다.";
     }
 
+    @PostMapping("/{tripTeamId}/addTripPlan")
+    @ResponseStatus(HttpStatus.OK)
+    public String addTripPlan(@PathVariable Long tripTeamId, @RequestBody TripPlanRequestDto tripPlanRequestDto, HttpServletRequest request) {
+        LoginSessionInfo user = (LoginSessionInfo) request.getAttribute("user");
+        tripPlanService.makeTripPlan(user.getUserId(), tripTeamId, tripPlanRequestDto.getPlanName(), tripPlanRequestDto.getPlanContent());
+        return "계획 생성이 완료되었습니다.";
+    }
+
+    @PostMapping("/{tripTeamId}/{tripPlanId}/addAttraction")
+    @ResponseStatus(HttpStatus.OK)
+    public void addAttraction(
+            @PathVariable Long tripTeamId,
+            @PathVariable Long tripPlanId,
+            @RequestBody List<Integer> attractionInfo,
+            HttpServletRequest request
+    ) {
+        LoginSessionInfo user = (LoginSessionInfo) request.getAttribute("user");
+        tripPlanService.addPlanAttractions(user.getUserId(), tripTeamId, tripPlanId, attractionInfo);
+    }
+
+    @DeleteMapping("/{tripTeamId}/{tripPlanId}/{planAttractionId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAttraction(@PathVariable Long planAttractionId) {
+        planAttractionRepository.deleteById(planAttractionId);
+    }
 }

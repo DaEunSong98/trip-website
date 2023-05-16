@@ -22,7 +22,7 @@ public class TripPlanServiceImpl implements TripPlanService{
     private final AttractionInfoRepository attractionInfoRepository;
     private final TripPlanRepository tripPlanRepository;
     private final UserTripTeamRepository userTripTeamRepository;
-
+    private final PlanAttractionRepository planAttractionRepository;
 
     @Override
     public void makeTripPlan(Long userId, Long tripTeamId, String planName, String planContent) {
