@@ -8,4 +8,6 @@ public interface TripPlanRepositoryCustom {
     Optional<TripPlan> findTripPlanByIdJoinTripTeam(Long tripPlanId);
 
     Optional<TripPlan> findTripPlanByIdJoinPlanAttraction(Long tripPlanId);
+
+    void deleteTripPlanByTripTeamId(Long tripTeamId);
 }

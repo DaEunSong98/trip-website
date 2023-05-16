@@ -37,4 +37,11 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
                 .fetchOne();
         return Optional.ofNullable(findTripPlan);
     }
+
+    @Override
+    public void deleteTripPlanByTripTeamId(Long tripTeamId) {
+        queryFactory.delete(tripPlan)
+                .where(tripPlan.tripTeam.tripTeamId.eq(tripTeamId))
+                .execute();
+    }
 }
