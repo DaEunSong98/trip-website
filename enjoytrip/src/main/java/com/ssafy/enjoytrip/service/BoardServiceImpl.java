@@ -5,7 +5,7 @@ import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
-import com.ssafy.enjoytrip.exception.BoardException;
+import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.BoardRepository;
 import com.ssafy.enjoytrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional(readOnly = true)
     public Board getBoardDetail(Long boardId) {
         return boardRepository.findBoardByBoardId(boardId)
-                .orElseThrow(() -> new BoardException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void addBoard(Board board, Long userId, List<BoardImage> boardImages) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new BoardException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
 
         board.setUser(findUser);
         for (BoardImage boardImage : boardImages) {
@@ -59,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void updateBoard(BoardUpdateDto boardUpdateDto) {
         Board findBoard = boardRepository.findById(boardUpdateDto.getBoardId())
-                .orElseThrow(() -> new BoardException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
         findBoard.updateBoard(boardUpdateDto.getContent());
     }
 }

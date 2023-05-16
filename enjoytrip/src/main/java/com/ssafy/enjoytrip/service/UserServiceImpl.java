@@ -3,7 +3,7 @@ package com.ssafy.enjoytrip.service;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.UserSearch;
 import com.ssafy.enjoytrip.exception.LoginException;
-import com.ssafy.enjoytrip.exception.UserException;
+import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.UserRepository;
 import com.ssafy.enjoytrip.session.LoginSessionInfo;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new UserException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         User findUser = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new UserException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
         findUser.updateUser(user);
     }
 

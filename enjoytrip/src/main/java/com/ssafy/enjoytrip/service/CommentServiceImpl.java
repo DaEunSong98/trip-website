@@ -3,7 +3,7 @@ package com.ssafy.enjoytrip.service;
 import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.Comment;
 import com.ssafy.enjoytrip.domain.User;
-import com.ssafy.enjoytrip.exception.CommentException;
+import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.BoardRepository;
 import com.ssafy.enjoytrip.repository.CommentRepository;
 import com.ssafy.enjoytrip.repository.UserRepository;
@@ -33,9 +33,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void addComment(String content, Long boardId, Long userId) {
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new CommentException("잘못된 접근입니다"));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다"));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CommentException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
         Comment comment = Comment.builder().content(content).board(board).user(user).build();
         commentRepository.save(comment);
     }
@@ -44,20 +44,20 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     public Comment getComment(Long commentId) {
         return commentRepository.findCommentByIdUsingFetchJoin(commentId)
-                .orElseThrow(() -> new CommentException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
     }
 
     @Override
     public void editComment(Long commentId, String content) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
         comment.editComment(content);
     }
 
     @Override
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentException("잘못된 접근입니다."));
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
         commentRepository.delete(comment);
     }
 }

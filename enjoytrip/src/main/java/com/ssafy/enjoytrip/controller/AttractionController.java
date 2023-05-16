@@ -17,6 +17,8 @@ import com.ssafy.enjoytrip.service.AttractionService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequestMapping("/attraction")
@@ -27,7 +29,7 @@ public class AttractionController{
 
 	//목록 조회
 	@GetMapping("/search")
-	protected ResponseEntity<List<AttractionListResponseDto>> getAttractionList(AttractionSearch attractionSearch) {
+	protected ResponseEntity<List<AttractionListResponseDto>> getAttractionList(@Valid AttractionSearch attractionSearch) {
 
 		log.info("call AttractionController = {}, {}, {}", attractionSearch.getTitle(), attractionSearch.getContentTypeId(), attractionSearch.getPage());
 

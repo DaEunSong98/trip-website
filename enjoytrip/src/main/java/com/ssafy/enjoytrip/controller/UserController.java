@@ -3,7 +3,9 @@ package com.ssafy.enjoytrip.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
+import com.ssafy.enjoytrip.dto.request.UserJoinDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +33,6 @@ public class UserController {
 
 	private final UserService userService;
 
-
 	//로그인
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) {
@@ -45,14 +46,22 @@ public class UserController {
 
 	//회원 가입
 	@PostMapping("/signup")
-	public ResponseEntity<?> join(@RequestBody User user) {
+	public ResponseEntity<?> join(@RequestBody @Valid UserJoinDto userJoinDto) {
+		User user = User.builder()
+				.name(userJoinDto.getName())
+				.nickname(userJoinDto.getNickname())
+				.loginId(userJoinDto.getLoginId())
+				.mail(userJoinDto.getMail())
+				.password(userJoinDto.getPassword())
+				.phoneNumber(userJoinDto.getPhoneNumber())
+				.build();
 		userService.join(user);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//회원 정보 수정
 	@PatchMapping("/{userId}")
-	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UserUpdateDto userUpdateDto) {
+	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody @Valid UserUpdateDto userUpdateDto) {
 		User user = userUpdateDto.toEntity();
 		userService.updateUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);

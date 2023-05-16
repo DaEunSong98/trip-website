@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.image_util.FileStore;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
-import com.ssafy.enjoytrip.exception.BoardException;
 import com.ssafy.enjoytrip.service.BoardService;
 import com.ssafy.enjoytrip.session.LoginSessionInfo;
 
@@ -41,7 +41,7 @@ public class BoardController {
 
 	//게시글 목록
 	@GetMapping
-	public ResponseEntity<List<Board>> getBoardList(BoardSearch boardSearch) {
+	public ResponseEntity<List<Board>> getBoardList(@Valid BoardSearch boardSearch) {
 		List<Board> boardList = boardService.getAllBoards(boardSearch);
 		return new ResponseEntity<>(boardList, HttpStatus.OK);
 	}
@@ -61,7 +61,7 @@ public class BoardController {
 
 	//게시글 수정
 	@PatchMapping("/{boardId}")
-	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody BoardUpdateDto boardUpdateDto) {
+	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody @Valid BoardUpdateDto boardUpdateDto) {
 		boardService.updateBoard(boardUpdateDto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -72,12 +72,6 @@ public class BoardController {
 	public ResponseEntity<?> deleteBoard(@PathVariable long boardId) {
 		boardService.deleteBoard(boardId);
 		return ResponseEntity.ok().build();
-	}
-
-	// board exception handler
-	@ExceptionHandler(BoardException.class)
-	public ResponseEntity<String> boardExceptionHandle(BoardException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
 }

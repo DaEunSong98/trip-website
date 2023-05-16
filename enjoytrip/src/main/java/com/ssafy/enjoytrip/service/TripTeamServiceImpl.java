@@ -4,6 +4,7 @@ import com.ssafy.enjoytrip.domain.TripTeam;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.domain.team_relation.TeamRole;
+import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.TripTeamRepository;
 import com.ssafy.enjoytrip.repository.UserRepository;
 import com.ssafy.enjoytrip.repository.UserTripTeamRepository;
@@ -27,7 +28,7 @@ public class TripTeamServiceImpl implements TripTeamService {
     @Override
     public void makeTripTeam(Long userId, String teamName) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자"));
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 사용자"));
 
         TripTeam tripTeam = TripTeam.builder().teamName(teamName).build();
 
@@ -41,16 +42,16 @@ public class TripTeamServiceImpl implements TripTeamService {
     @Override
     public TripTeam findTripTeam(Long tripTeamId) {
         return tripTeamRepository.findById(tripTeamId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 팀"));
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 팀"));
     }
 
     @Override
     public void inviteUser(Long userId, Long teamId) {
         TripTeam tripTeam = tripTeamRepository.findById(teamId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 팀"));
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 팀"));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자"));
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 사용자"));
 
         UserTripTeam userTripTeam = UserTripTeam.builder().tripTeam(tripTeam).user(user).teamRole(TeamRole.MEMBER).accepted(false).build();
 

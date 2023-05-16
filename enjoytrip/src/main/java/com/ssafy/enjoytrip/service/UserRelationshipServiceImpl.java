@@ -3,6 +3,7 @@ package com.ssafy.enjoytrip.service;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.domain.UserRelationship;
 import com.ssafy.enjoytrip.domain.user_relation.Relation;
+import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.UserRelationshipRepository;
 import com.ssafy.enjoytrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class UserRelationshipServiceImpl implements UserRelationshipService {
 
     public void makeRelationship(Long userId, Long targetId, Relation relation) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 사용자 입력"));
+                .orElseThrow(() -> new NotFoundException("잘못된 사용자 입력"));
         User targetUser = userRepository.findById(targetId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 사용자 입력"));
+                .orElseThrow(() -> new NotFoundException("잘못된 사용자 입력"));
 
         UserRelationship userRelationship = UserRelationship.builder().user(user).targetUser(targetUser).relation(relation).build();
 
