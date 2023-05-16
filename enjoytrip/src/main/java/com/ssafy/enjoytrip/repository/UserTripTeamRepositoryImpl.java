@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.enjoytrip.domain.QTripTeam.*;
@@ -31,13 +32,25 @@ public class UserTripTeamRepositoryImpl implements UserTripTeamRepositoryCustom{
     }
 
     @Override
-    public Optional<UserTripTeam> getUserTripTeamUsingJoin(Long userId, Long teamId, Long tripPlanId) {
-        UserTripTeam findUserTripTeam = queryFactory.selectFrom(userTripTeam)
-                .join(userTripTeam.tripTeam, tripTeam).fetchJoin()
-                .join(userTripTeam.user, user).fetchJoin()
+    public boolean existsByUserIdAndTeamId(Long userId, Long teamId) {
+        return queryFactory.from(userTripTeam)
                 .where(userTripTeam.user.userId.eq(userId).and(userTripTeam.tripTeam.tripTeamId.eq(teamId)))
-                .fetchOne();
+                .select(userTripTeam.userTripTeamId)
+                .fetchFirst() != null;
+    }
 
-        return Optional.ofNullable(findUserTripTeam);
+    @Override
+    public List<UserTripTeam> findAllUserTripTeamByUserId(Long userId) {
+        return queryFactory.selectFrom(userTripTeam)
+                .join(userTripTeam.tripTeam, tripTeam).fetchJoin()
+                .where(userTripTeam.accepted.eq(false).and(userTripTeam.user.userId.eq(userId)))
+                .fetch();
+    }
+
+    @Override
+    public void deleteUserTripTeamByTripTeamId(Long tripTeamId) {
+        queryFactory.delete(userTripTeam)
+                .where(userTripTeam.tripTeam.tripTeamId.eq(tripTeamId))
+                .execute();
     }
 }
