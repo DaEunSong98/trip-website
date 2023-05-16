@@ -35,4 +35,8 @@ public class UserTripTeam extends BaseTimeEntity {
     public void addTripTeam(TripTeam tripTeam) {
         this.tripTeam = tripTeam;
     }
+
+    public void acceptInvite() {
+        this.accepted = true;
+    }
 }
