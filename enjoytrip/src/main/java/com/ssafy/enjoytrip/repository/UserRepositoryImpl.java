@@ -24,8 +24,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         BooleanBuilder builder = new BooleanBuilder();
 
-        if (StringUtils.hasText(userSearch.getNickNameSearch())) {
-            builder.or(user.nickname.contains(userSearch.getNickNameSearch()));
+        if (StringUtils.hasText(userSearch.getNickname())) {
+            builder.or(user.nickname.contains(userSearch.getNickname()));
         }
 
         return queryFactory.selectFrom(user)
