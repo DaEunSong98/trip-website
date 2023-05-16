@@ -42,6 +42,13 @@ public class FileStore {
         return imageResult;
     }
 
+    public void deleteFile(String fileName) {
+        File file = new File(getFilePath(fileName));
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
     /**\
      * MultipartFile -> BoardImage로 변환하고 File 저장하는 메서드
      */

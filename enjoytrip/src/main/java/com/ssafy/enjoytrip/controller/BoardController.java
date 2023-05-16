@@ -61,7 +61,12 @@ public class BoardController {
 
 	//게시글 수정
 	@PatchMapping("/{boardId}")
-	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody @Valid BoardUpdateDto boardUpdateDto) {
+	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody @Valid BoardUpdateDto boardUpdateDto, HttpServletRequest request) {
+		LoginSessionInfo user = (LoginSessionInfo)request.getAttribute("user");
+		Board board = boardService.getBoardDetail(boardId);
+		if (!board.getUser().getUserId().equals(user.getUserId())) {
+			throw new IllegalArgumentException("잘못된 접근입니다.");
+		}
 		boardService.updateBoard(boardUpdateDto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

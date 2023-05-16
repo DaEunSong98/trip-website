@@ -40,4 +40,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
                 .fetchOne());
     }
 
+    @Override
+    public void deleteCommentByBoardId(Long boardId) {
+        queryFactory.delete(comment)
+                .where(comment.board.boardId.eq(boardId))
+                .execute();
+    }
 }

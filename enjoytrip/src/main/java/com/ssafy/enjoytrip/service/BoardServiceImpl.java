@@ -6,7 +6,10 @@ import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.exception.NotFoundException;
+import com.ssafy.enjoytrip.image_util.FileStore;
+import com.ssafy.enjoytrip.repository.BoardImageRepository;
 import com.ssafy.enjoytrip.repository.BoardRepository;
+import com.ssafy.enjoytrip.repository.CommentRepository;
 import com.ssafy.enjoytrip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,12 @@ public class BoardServiceImpl implements BoardService {
 
     private final UserRepository userRepository;
 
+    private final CommentRepository commentRepository;
+
+    private final BoardImageRepository boardImageRepository;
+
+    private final FileStore fileStore;
+
     @Override
     @Transactional(readOnly = true)
     public Board getBoardDetail(Long boardId) {
@@ -40,7 +49,15 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void deleteBoard(Long id) {
-        boardRepository.deleteById(id);
+        Board board = boardRepository.findBoardByBoardId(id)
+                .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
+
+        for (BoardImage boardImage : board.getBoardImages()) {
+            fileStore.deleteFile(boardImage.getStoredFileName());
+            boardImageRepository.delete(boardImage);
+        }
+
+        commentRepository.deleteCommentByBoardId(id);
     }
 
     @Override
