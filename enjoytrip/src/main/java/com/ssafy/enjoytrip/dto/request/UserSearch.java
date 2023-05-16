@@ -2,6 +2,8 @@ package com.ssafy.enjoytrip.dto.request;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @Builder
@@ -9,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class UserSearch {
 
+    @NotBlank(message = "검색어 입력은 필수입니다.")
     private String nickNameSearch;
 
     @Builder.Default

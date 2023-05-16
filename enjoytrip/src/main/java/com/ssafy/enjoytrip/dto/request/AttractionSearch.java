@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @Builder
@@ -13,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AttractionSearch {
 
+    @NotBlank(message = "검색어 입력은 필수입니다.")
     String title;
 
     Integer contentTypeId;

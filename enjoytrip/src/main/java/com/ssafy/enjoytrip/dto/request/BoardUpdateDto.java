@@ -9,7 +9,7 @@ public class BoardUpdateDto {
 
     private Long boardId;
 
-    @NotBlank
+    @NotBlank(message = "내용을 입력해주세요")
     private String content;
 
 }
