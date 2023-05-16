@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 public class UserSearch {
 
     @NotBlank(message = "검색어 입력은 필수입니다.")
-    private String nickNameSearch;
+    private String nickname;
 
     @Builder.Default
     private Integer page = 1;
