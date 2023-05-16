@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Builder
 @Getter
 public class TripPlan extends BaseTimeEntity {
 
@@ -24,6 +23,14 @@ public class TripPlan extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_team_id")
     private TripTeam tripTeam;
+
+    @Builder
+    public TripPlan(Long tripPlanId, String planContent, String planName, TripTeam tripTeam) {
+        this.tripPlanId = tripPlanId;
+        this.planContent = planContent;
+        this.planName = planName;
+        this.tripTeam = tripTeam;
+    }
 
     public void addPlanAttraction(PlanAttraction planAttraction){
         planAttractions.add(planAttraction);
