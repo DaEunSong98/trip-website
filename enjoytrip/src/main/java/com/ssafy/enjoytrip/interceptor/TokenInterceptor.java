@@ -49,6 +49,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
             if (user.getRefreshToken().equals(refreshToken)) {
                 String newAccessToken = jwtUtil.createAccessToken(LoginTokenConst.LOGIN_TOKEN, loginTokenInfo);
+                request.setAttribute(USER_INFO, loginTokenInfo);
                 response.setHeader(JwtUtil.REFRESH_TOKEN_NAME, newAccessToken);
                 return true;
             }
