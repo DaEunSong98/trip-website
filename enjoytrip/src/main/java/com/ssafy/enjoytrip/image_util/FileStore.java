@@ -29,6 +29,10 @@ public class FileStore {
 
         List<BoardImage> imageResult = new ArrayList<>();
 
+        if (multipartFiles == null) {
+            return imageResult;
+        }
+
         for (MultipartFile multipartFile : multipartFiles) {
             if (multipartFile.isEmpty()) {
                 continue;
