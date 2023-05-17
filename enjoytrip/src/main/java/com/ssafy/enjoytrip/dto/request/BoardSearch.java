@@ -15,7 +15,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class BoardSearch {
 
-    @NotBlank(message = "검색어 입력은 필수입니다.")
     private String searchString;
 
     @Builder.Default
