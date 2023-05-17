@@ -13,4 +13,8 @@ public @interface PhoneNumber {
 
     String message() default "올바른 전화번호 형식이 아닙니다";
 
+    Class[] groups() default {};
+
+    Class[] payload() default {};
+
 }
