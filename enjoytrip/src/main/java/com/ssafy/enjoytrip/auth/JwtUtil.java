@@ -57,4 +57,11 @@ public class JwtUtil {
         }
     }
 
+    public Claims parseToken(String jwt) {
+        return Jwts.parserBuilder()
+                .setSigningKey(this.secretKey)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+    }
 }
