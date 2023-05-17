@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.dto.response.BoardDetailResponseDto;
 import com.ssafy.enjoytrip.dto.response.BoardListResponseDto;
-import com.ssafy.enjoytrip.image_util.FileStore;
+import com.ssafy.enjoytrip.util.FileStore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

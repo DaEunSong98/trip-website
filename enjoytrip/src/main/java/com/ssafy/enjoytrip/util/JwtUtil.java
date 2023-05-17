@@ -1,4 +1,4 @@
-package com.ssafy.enjoytrip.auth;
+package com.ssafy.enjoytrip.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

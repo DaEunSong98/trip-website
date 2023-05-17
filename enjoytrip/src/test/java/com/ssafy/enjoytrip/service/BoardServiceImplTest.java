@@ -4,7 +4,7 @@ import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
-import com.ssafy.enjoytrip.image_util.FileStore;
+import com.ssafy.enjoytrip.util.FileStore;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

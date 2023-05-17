@@ -4,7 +4,7 @@ package com.ssafy.enjoytrip.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.ssafy.enjoytrip.auth.JwtUtil;
+import com.ssafy.enjoytrip.util.JwtUtil;
 import com.ssafy.enjoytrip.domain.UserRelationship;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.domain.user_relation.Relation;

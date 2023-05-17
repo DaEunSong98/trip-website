@@ -1,4 +1,4 @@
-package com.ssafy.enjoytrip.image_util;
+package com.ssafy.enjoytrip.util;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.exception.NotImageException;

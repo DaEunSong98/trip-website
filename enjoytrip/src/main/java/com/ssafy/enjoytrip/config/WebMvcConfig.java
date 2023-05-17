@@ -1,6 +1,6 @@
 package com.ssafy.enjoytrip.config;
 
-import com.ssafy.enjoytrip.interceptor.TokenInterceptor;
+import com.ssafy.enjoytrip.token.interceptor.TokenInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -6,7 +6,7 @@ import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.exception.NotFoundException;
-import com.ssafy.enjoytrip.image_util.FileStore;
+import com.ssafy.enjoytrip.util.FileStore;
 import com.ssafy.enjoytrip.repository.BoardImageRepository;
 import com.ssafy.enjoytrip.repository.BoardRepository;
 import com.ssafy.enjoytrip.repository.CommentRepository;

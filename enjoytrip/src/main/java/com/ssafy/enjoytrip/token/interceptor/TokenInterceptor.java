@@ -1,6 +1,6 @@
-package com.ssafy.enjoytrip.interceptor;
+package com.ssafy.enjoytrip.token.interceptor;
 
-import com.ssafy.enjoytrip.auth.JwtUtil;
+import com.ssafy.enjoytrip.util.JwtUtil;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.service.UserService;
 import com.ssafy.enjoytrip.token.LoginTokenConst;
