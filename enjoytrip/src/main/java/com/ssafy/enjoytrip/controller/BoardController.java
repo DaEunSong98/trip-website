@@ -2,12 +2,14 @@ package com.ssafy.enjoytrip.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
+import com.ssafy.enjoytrip.dto.response.BoardResponseDto;
 import com.ssafy.enjoytrip.image_util.FileStore;
 import com.ssafy.enjoytrip.token.LoginTokenConst;
 import org.springframework.http.HttpStatus;
@@ -44,9 +46,11 @@ public class BoardController {
 
 	//게시글 목록
 	@GetMapping
-	public ResponseEntity<List<Board>> getBoardList(@Valid BoardSearch boardSearch) {
-		List<Board> boardList = boardService.getAllBoards(boardSearch);
-		return new ResponseEntity<>(boardList, HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public List<BoardResponseDto> getBoardList(@Valid BoardSearch boardSearch) {
+		return boardService.getAllBoards(boardSearch)
+				.stream().map(BoardResponseDto::new)
+				.collect(Collectors.toList());
 	}
 
 	//게시글 등록
