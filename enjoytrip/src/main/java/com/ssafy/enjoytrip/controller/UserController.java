@@ -50,7 +50,7 @@ public class UserController {
 	//로그인
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
-	public TokenResponseDto login(@RequestBody UserLoginDto userLoginDto) {
+	public TokenResponseDto login(@RequestBody @Valid UserLoginDto userLoginDto) {
 
 		LoginTokenInfo loginTokenInfo = userService.loginUser(userLoginDto.getLoginId(), userLoginDto.getPassword());
 

@@ -3,13 +3,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ssafy.enjoytrip.dto.response.AttractionListResponseDto;
+import com.ssafy.enjoytrip.dto.response.GugunResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.enjoytrip.domain.AttractionInfo;
 import com.ssafy.enjoytrip.dto.request.AttractionSearch;
@@ -42,4 +40,10 @@ public class AttractionController{
 		return new ResponseEntity<>(responseList, HttpStatus.OK);
 	}
 
+	@GetMapping("/gugun-list")
+	@ResponseStatus(HttpStatus.OK)
+	public List<GugunResponseDto> getAllGugun(@PathVariable Integer sidoCode) {
+		return attractionService.getAllGugunBySidoCode(sidoCode)
+				.stream().map(GugunResponseDto::new).collect(Collectors.toList());
+	}
 }
