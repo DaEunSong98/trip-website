@@ -5,13 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
-import com.ssafy.enjoytrip.dto.response.BoardResponseDto;
+import com.ssafy.enjoytrip.dto.response.BoardDetailResponseDto;
+import com.ssafy.enjoytrip.dto.response.BoardListResponseDto;
 import com.ssafy.enjoytrip.image_util.FileStore;
-import com.ssafy.enjoytrip.token.LoginTokenConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,17 +38,18 @@ public class BoardController {
 
 	//게시글 세부 정보
 	@GetMapping("/{boardId}")
-	public ResponseEntity<Board> getBoardDetail(@PathVariable("boardId") Long boardId) {
+	@ResponseStatus(HttpStatus.OK)
+	public BoardDetailResponseDto getBoardDetail(@PathVariable("boardId") Long boardId) {
 		Board board = boardService.getBoardDetail(boardId);
-		return new ResponseEntity<>(board, HttpStatus.OK);
+		return new BoardDetailResponseDto(board);
 	}
 
 	//게시글 목록
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<BoardResponseDto> getBoardList(@Valid BoardSearch boardSearch) {
+	public List<BoardListResponseDto> getBoardList(@Valid BoardSearch boardSearch) {
 		return boardService.getAllBoards(boardSearch)
-				.stream().map(BoardResponseDto::new)
+				.stream().map(BoardListResponseDto::new)
 				.collect(Collectors.toList());
 	}
 

@@ -4,13 +4,13 @@ import com.ssafy.enjoytrip.domain.Board;
 import lombok.Data;
 
 @Data
-public class BoardResponseDto {
+public class BoardListResponseDto {
 
     private Long boardId;
     private String title;
     private String nickname;
 
-    public BoardResponseDto(Board board) {
+    public BoardListResponseDto(Board board) {
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
         this.nickname = board.getUser().getNickname();
