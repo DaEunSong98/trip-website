@@ -5,7 +5,7 @@ import com.ssafy.enjoytrip.dto.request.UserSearch;
 import com.ssafy.enjoytrip.exception.LoginException;
 import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.UserRepository;
-import com.ssafy.enjoytrip.session.LoginSessionInfo;
+import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,11 +35,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginSessionInfo loginUser(String loginId, String password) {
+    public LoginTokenInfo loginUser(String loginId, String password) {
         User findUser = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new LoginException("잘못된 아이디 또는 비밀번호를 입력했습니다."));
         if (findUser.loginLogic(password)) {
-            return new LoginSessionInfo(findUser.getUserId(), findUser.getNickname());
+            return new LoginTokenInfo(findUser.getUserId(), findUser.getNickname());
         }
         throw new LoginException("잘못된 아이디 또는 비밀번호를 입력했습니다.");
     }
@@ -59,5 +59,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public void saveRefreshToken(String loginId, String refreshToken) {
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new NotFoundException("잘못된 입력입니다."));
+        user.addRefreshToken(refreshToken);
+    }
+
+    @Override
+    public void deleteUserRefreshToken(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("잘못된 입력입니다."));
+        user.addRefreshToken(null);
     }
 }

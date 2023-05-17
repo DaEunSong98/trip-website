@@ -30,7 +30,7 @@ class TripTeamServiceImplTest {
     @BeforeEach
     void before() {
         User user = User.builder().name("테스트").build();
-        TripTeam tripTeam = TripTeam.builder().teamName("테스트팀").master(user).build();
+        TripTeam tripTeam = TripTeam.builder().teamName("테스트팀").build();
         em.persist(user);
         em.persist(tripTeam);
         userId = user.getUserId();
@@ -46,7 +46,6 @@ class TripTeamServiceImplTest {
         em.persist(inviteUser);
         TripTeam tripTeam = tripTeamService.findTripTeam(tripTeamId);
         Long inviteUserId = inviteUser.getUserId();
-        tripTeamService.addTeamMember(inviteUserId, tripTeam.getTripTeamId());
         em.flush();
 
         TripTeam tripTeam2 = tripTeamService.findTripTeam(tripTeamId);

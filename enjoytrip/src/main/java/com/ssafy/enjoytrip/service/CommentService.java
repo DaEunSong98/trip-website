@@ -11,7 +11,7 @@ public interface CommentService {
 
     Comment getComment(Long commentId);
 
-    void editComment(Long commentId, String content);
+    void editComment(Long commentId, String content, Long userId);
 
-    void deleteComment(Long commentId);
+    void deleteComment(Long commentId, Long userId);
 }

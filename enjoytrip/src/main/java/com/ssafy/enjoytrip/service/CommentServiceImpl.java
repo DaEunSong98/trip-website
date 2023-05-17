@@ -48,16 +48,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void editComment(Long commentId, String content) {
-        Comment comment = commentRepository.findById(commentId)
+    public void editComment(Long commentId, String content, Long userId) {
+        Comment comment = commentRepository.findCommentByIdUsingFetchJoin(commentId)
                 .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
+        if (!comment.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("잘못된 접근입니다");
+        }
         comment.editComment(content);
     }
 
     @Override
-    public void deleteComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId)
+    public void deleteComment(Long commentId, Long userId) {
+        Comment comment = commentRepository.findCommentByIdUsingFetchJoin(commentId)
                 .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
+        if (!comment.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("잘못된 접근입니다");
+        }
         commentRepository.delete(comment);
     }
 }

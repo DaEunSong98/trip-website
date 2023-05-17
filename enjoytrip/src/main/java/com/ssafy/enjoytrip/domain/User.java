@@ -31,9 +31,10 @@ public class User extends BaseTimeEntity {
     private String name;
     private String password;
     private String phoneNumber;
+    private String refreshToken;
 
     @Builder
-    public User(Long userId, String loginId, String nickname, String mail, String name, String password, String phoneNumber) {
+    public User(Long userId, String loginId, String nickname, String mail, String name, String password, String phoneNumber, String refreshToken) {
         this.userId = userId;
         this.loginId = loginId;
         this.nickname = nickname;
@@ -41,10 +42,15 @@ public class User extends BaseTimeEntity {
         this.name = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.refreshToken = refreshToken;
     }
 
     public boolean loginLogic(String password) {
         return this.password.equals(password);
+    }
+
+    public void addRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void updateUser(User user) {

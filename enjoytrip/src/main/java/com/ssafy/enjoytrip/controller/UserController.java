@@ -2,15 +2,16 @@ package com.ssafy.enjoytrip.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.ssafy.enjoytrip.auth.JwtUtil;
 import com.ssafy.enjoytrip.domain.UserRelationship;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.domain.user_relation.Relation;
 import com.ssafy.enjoytrip.dto.request.UserJoinDto;
 import com.ssafy.enjoytrip.dto.request.UserSearch;
 import com.ssafy.enjoytrip.dto.response.RelationshipResponseDto;
+import com.ssafy.enjoytrip.dto.response.TokenResponseDto;
 import com.ssafy.enjoytrip.dto.response.UserResponseDto;
 import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
 import com.ssafy.enjoytrip.service.TripTeamService;
@@ -23,13 +24,15 @@ import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.UserLoginDto;
 import com.ssafy.enjoytrip.dto.request.UserUpdateDto;
 import com.ssafy.enjoytrip.service.UserService;
-import com.ssafy.enjoytrip.session.LoginSessionConst;
-import com.ssafy.enjoytrip.session.LoginSessionInfo;
+import com.ssafy.enjoytrip.token.LoginTokenConst;
+import com.ssafy.enjoytrip.token.LoginTokenInfo;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.ssafy.enjoytrip.token.LoginTokenConst.USER_INFO;
 
 @RestController
 @RequestMapping("/user")
@@ -42,15 +45,21 @@ public class UserController {
 
 	private final UserRelationshipService userRelationshipService;
 
+	private final JwtUtil jwtUtil;
+
 	//로그인
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) {
+	@ResponseStatus(HttpStatus.OK)
+	public TokenResponseDto login(@RequestBody UserLoginDto userLoginDto) {
 
-		HttpSession session = request.getSession();
-		LoginSessionInfo loginSessionInfo = userService.loginUser(userLoginDto.getLoginId(), userLoginDto.getPassword());
-		session.setAttribute(LoginSessionConst.LOGIN_SESSION, loginSessionInfo);
+		LoginTokenInfo loginTokenInfo = userService.loginUser(userLoginDto.getLoginId(), userLoginDto.getPassword());
 
-		return new ResponseEntity<>(HttpStatus.OK);
+		String accessToken = jwtUtil.createAccessToken(LoginTokenConst.LOGIN_TOKEN, loginTokenInfo);
+		String refreshToken = jwtUtil.createRefreshToken(LoginTokenConst.LOGIN_TOKEN, loginTokenInfo);
+
+		userService.saveRefreshToken(userLoginDto.getLoginId(), refreshToken);
+
+		return TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).message("Create Token").build();
 	}
 
 	//회원 가입
@@ -70,7 +79,13 @@ public class UserController {
 
 	//회원 정보 수정
 	@PatchMapping("/{userId}")
-	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody @Valid UserUpdateDto userUpdateDto) {
+	public ResponseEntity<?> updateUser(@PathVariable long userId,
+										@RequestBody @Valid UserUpdateDto userUpdateDto,
+										HttpServletRequest request) {
+		LoginTokenInfo userInfo = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		if (userInfo.getUserId() != userId) {
+			throw new IllegalArgumentException("잘못된 접근입니다.");
+		}
 		User user = userUpdateDto.toEntity();
 		userService.updateUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -78,7 +93,11 @@ public class UserController {
 
 	//회원 상세 정보 조회
 	@GetMapping("/{userId}")
-	public ResponseEntity<User> getUserDetail(@PathVariable long userId) {
+	public ResponseEntity<User> getUserDetail(@PathVariable long userId, HttpServletRequest request) {
+		LoginTokenInfo userInfo = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		if (userInfo.getUserId() != userId) {
+			throw new IllegalArgumentException("잘못된 접근입니다.");
+		}
 		User user = userService.findUserById(userId);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
@@ -93,26 +112,23 @@ public class UserController {
 	//회원 정보 삭제
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deleteUser(HttpServletRequest request) {
-		// TODO: 2023-05-03 로그인 JWT 토큰 기반으로 변경 시 리팩토링 하기
-		HttpSession session = request.getSession();
-		LoginSessionInfo loginSession = (LoginSessionInfo) session.getAttribute(LoginSessionConst.LOGIN_SESSION);
-		userService.deleteUser(loginSession.getUserId());
-		session.invalidate();
+		LoginTokenInfo userInfo = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		userService.deleteUser(userInfo.getUserId());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	//로그 아웃
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		session.invalidate();
+		LoginTokenInfo userInfo = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		userService.deleteUserRefreshToken(userInfo.getUserId());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@GetMapping("/invite")
 	@ResponseStatus(HttpStatus.OK)
 	public List<UserTripTeamForm> allInviteInfo(HttpServletRequest request) {
-		LoginSessionInfo user = (LoginSessionInfo) request.getAttribute("user");
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		List<UserTripTeam> allUserTripTeam = tripTeamService.getAllUserTripTeam(user.getUserId());
 		return allUserTripTeam.stream().map(UserTripTeamForm::new).collect(Collectors.toList());
 	}
@@ -120,7 +136,7 @@ public class UserController {
 	@GetMapping("/relationship/{relation}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<RelationshipResponseDto> getAllRelation(@PathVariable Relation relation, HttpServletRequest request) {
-		LoginSessionInfo user = (LoginSessionInfo) request.getAttribute("user");
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		List<UserRelationship> findRelation = userRelationshipService.getAllUserByRelation(user.getUserId(), relation);
 		return findRelation.stream().map(RelationshipResponseDto::new).collect(Collectors.toList());
 	}
@@ -128,7 +144,7 @@ public class UserController {
 	@PostMapping("/relationship/{targetId}")
 	@ResponseStatus(HttpStatus.OK)
 	public String addRelationship(@PathVariable Long targetId, @RequestBody Relation relation, HttpServletRequest request) {
-		LoginSessionInfo user = (LoginSessionInfo) request.getAttribute("user");
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		userRelationshipService.makeRelationship(user.getUserId(), targetId, relation);
 		return "요청 완료";
 	}
@@ -136,7 +152,7 @@ public class UserController {
 	@DeleteMapping("/relationship/{targetId}")
 	@ResponseStatus(HttpStatus.OK)
 	public String deleteRelationship(@PathVariable Long targetId, HttpServletRequest request) {
-		LoginSessionInfo user = (LoginSessionInfo) request.getAttribute("user");
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		long count = userRelationshipService.deleteRelationship(user.getUserId(), targetId);
 		if (count == 0) {
 			throw new IllegalArgumentException("잘못된 요청입니다.");

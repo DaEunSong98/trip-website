@@ -3,7 +3,7 @@ package com.ssafy.enjoytrip.service;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.UserUpdateDto;
 import com.ssafy.enjoytrip.exception.LoginException;
-import com.ssafy.enjoytrip.session.LoginSessionInfo;
+import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class UserServiceImplTest {
         User user = User.builder().loginId("Hello").password("hello2").nickname("안녕").build();
         userService.join(user);
         em.flush();
-        LoginSessionInfo session = userService.loginUser(user.getLoginId(), user.getPassword());
+        LoginTokenInfo session = userService.loginUser(user.getLoginId(), user.getPassword());
         Assertions.assertThat(session.getNickName()).isEqualTo("안녕");
     }
 

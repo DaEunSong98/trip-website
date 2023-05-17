@@ -48,9 +48,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void deleteBoard(Long id) {
+    public void deleteBoard(Long id, Long userId) {
         Board board = boardRepository.findBoardByBoardId(id)
                 .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
+
+        if (!board.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("잘못된 접근입니다");
+        }
 
         for (BoardImage boardImage : board.getBoardImages()) {
             fileStore.deleteFile(boardImage.getStoredFileName());
@@ -58,6 +62,8 @@ public class BoardServiceImpl implements BoardService {
         }
 
         commentRepository.deleteCommentByBoardId(id);
+
+        boardRepository.deleteById(id);
     }
 
     @Override

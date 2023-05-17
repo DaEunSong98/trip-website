@@ -13,7 +13,7 @@ public interface BoardService {
 
     List<Board> getAllBoards(BoardSearch boardSearch);
 
-    void deleteBoard(Long id);
+    void deleteBoard(Long id, Long userId);
 
     void addBoard(Board board, Long userId, List<BoardImage> boardImages);
 

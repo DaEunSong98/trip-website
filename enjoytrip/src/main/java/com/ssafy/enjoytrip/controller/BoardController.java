@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.image_util.FileStore;
+import com.ssafy.enjoytrip.token.LoginTokenConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,12 @@ import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.service.BoardService;
-import com.ssafy.enjoytrip.session.LoginSessionInfo;
+import com.ssafy.enjoytrip.token.LoginTokenInfo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.ssafy.enjoytrip.token.LoginTokenConst.*;
 
 
 @RestController
@@ -49,11 +52,10 @@ public class BoardController {
 	//게시글 등록
 	@PostMapping("/write")
 	public ResponseEntity<?> registerBoard(@RequestBody Board board, @RequestParam(value = "images", required = false) List<MultipartFile> images, HttpServletRequest request) throws IOException {
-		HttpSession session = request.getSession(); // TODO: 2023-05-03 여기 세션 정보 없으면 예외 던지게 설계하기 + JWT 추가할 때 다시 구현
-		LoginSessionInfo loginMember = (LoginSessionInfo) session.getAttribute("LoginMember");
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		List<BoardImage> boardImages = fileStore.storeImages(images);
 
-		boardService.addBoard(board, loginMember.getUserId(), boardImages);
+		boardService.addBoard(board, user.getUserId(), boardImages);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 
@@ -62,7 +64,7 @@ public class BoardController {
 	//게시글 수정
 	@PatchMapping("/{boardId}")
 	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody @Valid BoardUpdateDto boardUpdateDto, HttpServletRequest request) {
-		LoginSessionInfo user = (LoginSessionInfo)request.getAttribute("user");
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		Board board = boardService.getBoardDetail(boardId);
 		if (!board.getUser().getUserId().equals(user.getUserId())) {
 			throw new IllegalArgumentException("잘못된 접근입니다.");
@@ -74,8 +76,9 @@ public class BoardController {
 
 	//게시글 삭제
 	@DeleteMapping("/{boardId}")
-	public ResponseEntity<?> deleteBoard(@PathVariable long boardId) {
-		boardService.deleteBoard(boardId);
+	public ResponseEntity<?> deleteBoard(@PathVariable long boardId, HttpServletRequest request) {
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		boardService.deleteBoard(boardId, user.getUserId());
 		return ResponseEntity.ok().build();
 	}
 
