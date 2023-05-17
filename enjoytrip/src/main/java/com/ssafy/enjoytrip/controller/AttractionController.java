@@ -36,7 +36,7 @@ public class AttractionController{
 		List<AttractionInfo> list = attractionService.getAllAttraction(attractionSearch);
 
 		List<AttractionListResponseDto> responseList = list.stream()
-				.map(o1 -> new AttractionListResponseDto(o1.getContentTypeId(), o1.getContentId(), o1.getTitle(), o1.getAddr1(), o1.getAddr2(), o1.getZipcode(), o1.getFirstImage(), o1.getFirstImage2(), o1.getSido().getSidoName(), o1.getGugun().getGugunName()))
+				.map(AttractionListResponseDto::new)
 				.collect(Collectors.toList());
 
 		return new ResponseEntity<>(responseList, HttpStatus.OK);

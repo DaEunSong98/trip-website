@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.dto.response;
 
+import com.ssafy.enjoytrip.domain.AttractionInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,21 @@ public class AttractionListResponseDto {
     private String firstImage2;
     private String sidoName;
     private String gugunName;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 
+    public AttractionListResponseDto(AttractionInfo attractionInfo) {
+        this.contentId = attractionInfo.getContentId();
+        this.contentTypeId = attractionInfo.getContentTypeId();
+        this.title = attractionInfo.getTitle();
+        this.addr1 = attractionInfo.getAddr1();
+        this.addr2 = attractionInfo.getAddr2();
+        this.zipcode = attractionInfo.getZipcode();
+        this.firstImage = attractionInfo.getFirstImage();
+        this.firstImage2 = attractionInfo.getFirstImage2();
+        this.sidoName = attractionInfo.getSido().getSidoName();
+        this.gugunName = attractionInfo.getGugun().getGugunName();
+        this.latitude = attractionInfo.getLatitude();
+        this.longitude = attractionInfo.getLongitude();
+    }
 }
