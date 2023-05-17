@@ -39,7 +39,7 @@ public class BoardController {
 
 	//게시글 세부 정보
 	@GetMapping("/{boardId}")
-	public ResponseEntity<Board> getBoardDetail(@PathVariable("boardId") long boardId) {
+	public ResponseEntity<Board> getBoardDetail(@PathVariable("boardId") Long boardId) {
 		Board board = boardService.getBoardDetail(boardId);
 		return new ResponseEntity<>(board, HttpStatus.OK);
 	}

@@ -46,7 +46,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     public Optional<Board> findBoardByBoardId(Long boardId) {
         Board board1 = queryFactory.selectFrom(board)
                 .join(board.user, user).fetchJoin()
-                .join(board.boardImages, boardImage).fetchJoin()
+                .leftJoin(board.boardImages, boardImage).fetchJoin()
                 .where(board.boardId.eq(boardId))
                 .fetchOne();
         return Optional.ofNullable(board1);
