@@ -8,12 +8,15 @@ import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.Objects;
 
 import static com.ssafy.enjoytrip.token.LoginTokenConst.USER_INFO;
 
@@ -31,9 +34,9 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         log.info("call TokenInterceptor");
 
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Headers", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+        if (isPreflightRequest(request)) {
+            return true;
+        }
 
         String accessToken = request.getHeader(JwtUtil.ACCESS_TOKEN_NAME);
 
@@ -60,5 +63,25 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         return false;
+    }
+
+    private boolean isPreflightRequest(HttpServletRequest request) {
+        return isOptions(request) && hasHeaders(request) && hasMethod(request) && hasOrigin(request);
+    }
+
+    private boolean isOptions(HttpServletRequest request) {
+        return request.getMethod().equalsIgnoreCase(HttpMethod.OPTIONS.toString());
+    }
+
+    private boolean hasHeaders(HttpServletRequest request) {
+        return Objects.nonNull(request.getHeader("Access-Control-Request-Headers"));
+    }
+
+    private boolean hasMethod(HttpServletRequest request) {
+        return Objects.nonNull(request.getHeader("Access-Control-Request-Method"));
+    }
+
+    private boolean hasOrigin(HttpServletRequest request) {
+        return Objects.nonNull(request.getHeader("Origin"));
     }
 }
