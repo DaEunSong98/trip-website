@@ -16,6 +16,7 @@ import com.ssafy.enjoytrip.dto.response.UserResponseDto;
 import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
 import com.ssafy.enjoytrip.service.TripTeamService;
 import com.ssafy.enjoytrip.service.UserRelationshipService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 import static com.ssafy.enjoytrip.token.LoginTokenConst.USER_INFO;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -60,6 +62,14 @@ public class UserController {
 		userService.saveRefreshToken(userLoginDto.getLoginId(), refreshToken);
 
 		return TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).message("Create Token").build();
+	}
+
+	// 중복 체크
+	@GetMapping("/login/duplicate")
+	@ResponseStatus(HttpStatus.OK)
+	public boolean duplicateCheck(@ModelAttribute(name = "loginId") String loginId) {
+		log.info("loginId = {}", loginId);
+		return userService.idDuplicateCheck(loginId);
 	}
 
 	//회원 가입
