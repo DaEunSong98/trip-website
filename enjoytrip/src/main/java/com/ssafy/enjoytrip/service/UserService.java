@@ -25,4 +25,6 @@ public interface UserService {
     void saveRefreshToken(String loginId, String refreshToken);
 
     void deleteUserRefreshToken(Long userId);
+
+    boolean idDuplicateCheck(String loginId);
 }

@@ -11,6 +11,7 @@ import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.dto.response.BoardDetailResponseDto;
 import com.ssafy.enjoytrip.dto.response.BoardListResponseDto;
 import com.ssafy.enjoytrip.util.FileStore;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import static com.ssafy.enjoytrip.token.LoginTokenConst.*;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -58,6 +60,8 @@ public class BoardController {
 	public ResponseEntity<?> registerBoard(@RequestBody Board board, @RequestParam(value = "images", required = false) List<MultipartFile> images, HttpServletRequest request) throws IOException {
 		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		List<BoardImage> boardImages = fileStore.storeImages(images);
+
+		log.info("board = {}, {}, {}", board, user, images);
 
 		boardService.addBoard(board, user.getUserId(), boardImages);
 

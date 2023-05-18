@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -17,15 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TripPlanServiceImpl implements TripPlanService{
 
-    private final UserRepository userRepository;
-    private final TripTeamRepository tripTeamRepository;
     private final AttractionInfoRepository attractionInfoRepository;
     private final TripPlanRepository tripPlanRepository;
     private final UserTripTeamRepository userTripTeamRepository;
     private final PlanAttractionRepository planAttractionRepository;
 
     @Override
-    public void makeTripPlan(Long userId, Long tripTeamId, String planName, String planContent) {
+    public void makeTripPlan(Long userId, Long tripTeamId, String planName, String planContent, LocalDate startDate, LocalDate endDate) {
 
         UserTripTeam userTripTeam = getUserTripTeam(userId, tripTeamId);
 
@@ -54,21 +53,31 @@ public class TripPlanServiceImpl implements TripPlanService{
     }
 
     @Override
-    public void deleteTripPlan(Long userId, Long tripPlanId) {
+    public void deleteTripPlan(Long userId, Long tripPlanId, Long tripTeamId) {
+        getUserTripTeam(userId, tripTeamId);
+        planAttractionRepository.deletePlanAttractionsByTripPlanId(tripPlanId);
         tripPlanRepository.deleteById(tripPlanId);
     }
 
     @Override
-    public TripPlan getTripPlan(Long tripPlanId) {
-        return tripPlanRepository.findTripPlanByIdJoinTripTeam(tripPlanId)
+    public TripPlan getTripPlan(Long tripPlanId, Long tripTeamId, Long userId) {
+
+        userTripTeamRepository.getUserTripTeamByUserIdAndTeamId(userId, tripTeamId)
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 입력"));
+
+        return tripPlanRepository.findTripPlanByIdJoinPlanAttraction(tripPlanId)
                 .orElseThrow(() -> new NotFoundException("유효하지 않은 계획"));
     }
 
     @Override
-    public List<PlanAttraction> getPlanAttractions(Long tripPlanId) {
-        return tripPlanRepository.findTripPlanByIdJoinPlanAttraction(tripPlanId)
-                .orElseThrow(() -> new NotFoundException("유효하지 않은 계획"))
-                .getPlanAttractions();
+    public List<TripPlan> getTripPlansByTripTeamId(Long tripTeamId) {
+        return tripPlanRepository.findTripPlanListByTripTeamId(tripTeamId);
+    }
+
+    @Override
+    public void deletePlanAttraction(Long userId, Long planAttractionId, Long tripTeamId) {
+        getUserTripTeam(userId, tripTeamId);
+        planAttractionRepository.deleteById(planAttractionId);
     }
 
     private UserTripTeam getUserTripTeam(Long userId, Long tripTeamId) {

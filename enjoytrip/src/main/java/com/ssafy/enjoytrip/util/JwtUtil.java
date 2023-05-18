@@ -1,5 +1,8 @@
 package com.ssafy.enjoytrip.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.enjoytrip.token.LoginTokenConst;
+import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -57,11 +60,14 @@ public class JwtUtil {
         }
     }
 
-    public Claims parseToken(String jwt) {
-        return Jwts.parserBuilder()
+    public LoginTokenInfo parseToken(String jwt) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.secretKey)
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody();
+
+        return new ObjectMapper()
+                .convertValue(claims.get(LoginTokenConst.LOGIN_TOKEN), LoginTokenInfo.class);
     }
 }

@@ -42,7 +42,8 @@ public class AttractionController{
 
 	@GetMapping("/gugun-list")
 	@ResponseStatus(HttpStatus.OK)
-	public List<GugunResponseDto> getAllGugun(@PathVariable Integer sidoCode) {
+	public List<GugunResponseDto> getAllGugun(@RequestParam Integer sidoCode) {
+
 		return attractionService.getAllGugunBySidoCode(sidoCode)
 				.stream().map(GugunResponseDto::new).collect(Collectors.toList());
 	}

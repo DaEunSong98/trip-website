@@ -74,4 +74,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("잘못된 입력입니다."));
         user.addRefreshToken(null);
     }
+
+    @Override
+    public boolean idDuplicateCheck(String loginId) {
+        return !userRepository.existsByLoginId(loginId);
+    }
 }
