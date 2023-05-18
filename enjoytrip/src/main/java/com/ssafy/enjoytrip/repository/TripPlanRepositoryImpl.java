@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.enjoytrip.domain.TripPlan;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.enjoytrip.domain.QPlanAttraction.*;
@@ -29,10 +30,18 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
     }
 
     @Override
+    public List<TripPlan> findTripPlanListByTripTeamId(Long tripTeamId) {
+        return queryFactory
+                .selectFrom(tripPlan)
+                .where(tripPlan.tripTeam.tripTeamId.eq(tripTeamId))
+                .fetch();
+    }
+
+    @Override
     public Optional<TripPlan> findTripPlanByIdJoinPlanAttraction(Long tripPlanId) {
         TripPlan findTripPlan = queryFactory
                 .selectFrom(tripPlan)
-                .join(tripPlan.planAttractions, planAttraction).fetchJoin()
+                .leftJoin(tripPlan.planAttractions, planAttraction).fetchJoin()
                 .where(tripPlan.tripPlanId.eq(tripPlanId))
                 .fetchOne();
         return Optional.ofNullable(findTripPlan);
