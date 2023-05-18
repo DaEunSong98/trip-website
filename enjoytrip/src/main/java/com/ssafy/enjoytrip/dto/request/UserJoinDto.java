@@ -28,7 +28,7 @@ public class UserJoinDto {
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "(?=.\\d)(?=.[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용해주세요.")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*\\W)[A-Za-z\\d\\W]{8,16}$", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용해주세요.")
     private String password;
 
     @PhoneNumber
