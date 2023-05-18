@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,14 @@ public class TripPlan extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tripPlanId;
+
     private String planContent;
+
     private String planName;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
 
     @OneToMany(mappedBy = "tripPlan", cascade = CascadeType.ALL)
     private List<PlanAttraction> planAttractions = new ArrayList<>();
@@ -25,10 +32,13 @@ public class TripPlan extends BaseTimeEntity {
     private TripTeam tripTeam;
 
     @Builder
-    public TripPlan(Long tripPlanId, String planContent, String planName, TripTeam tripTeam) {
+    public TripPlan(Long tripPlanId, String planContent, String planName, LocalDate startDate, LocalDate endDate, List<PlanAttraction> planAttractions, TripTeam tripTeam) {
         this.tripPlanId = tripPlanId;
         this.planContent = planContent;
         this.planName = planName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.planAttractions = planAttractions;
         this.tripTeam = tripTeam;
     }
 
