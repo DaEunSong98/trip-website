@@ -15,16 +15,4 @@ public class EnjoytripApplication {
 		SpringApplication.run(EnjoytripApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigure() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("http://127.0.0.1:5500", "http://127.0.0.1:9001", "http://localhost:9001")
-						.allowedHeaders("Authorization", "Content-Type", "X-Custom-Header")
-				;
-			}
-		};
-	}
 }
