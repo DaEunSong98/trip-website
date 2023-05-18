@@ -34,8 +34,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         String accessToken = request.getHeader(JwtUtil.ACCESS_TOKEN_NAME);
 
         if (jwtUtil.checkToken(accessToken)) {
-            Claims claims = jwtUtil.parseToken(accessToken);
-            LoginTokenInfo loginTokenInfo = claims.get(LoginTokenConst.LOGIN_TOKEN, LoginTokenInfo.class);
+            LoginTokenInfo loginTokenInfo = jwtUtil.parseToken(accessToken);
             request.setAttribute(USER_INFO, loginTokenInfo);
             return true;
         }
@@ -43,8 +42,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         String refreshToken = request.getHeader(JwtUtil.REFRESH_TOKEN_NAME);
 
         if (jwtUtil.checkToken(refreshToken)) {
-            Claims claims = jwtUtil.parseToken(refreshToken);
-            LoginTokenInfo loginTokenInfo = claims.get(LoginTokenConst.LOGIN_TOKEN, LoginTokenInfo.class);
+            LoginTokenInfo loginTokenInfo = jwtUtil.parseToken(refreshToken);
             User user = userService.findUserById(loginTokenInfo.getUserId());
 
             if (user.getRefreshToken().equals(refreshToken)) {
