@@ -147,4 +147,12 @@ public class TripTeamController {
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
         tripPlanService.deleteTripPlan(user.getUserId(), tripPlanId, tripTeamId);
     }
+
+    @GetMapping("/{tripTeamId}/user/leader")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean validLeader(@PathVariable Long tripTeamId, HttpServletRequest request) {
+        log.info("validLeader");
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        return tripTeamService.validUserIsLeader(user.getUserId(), tripTeamId);
+    }
 }

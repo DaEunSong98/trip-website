@@ -106,6 +106,11 @@ public class TripTeamServiceImpl implements TripTeamService {
         return userTripTeamRepository.findAllUserTripTeamByUserId(userId);
     }
 
+    @Override
+    public boolean validUserIsLeader(Long userId, Long tripTeamId) {
+        return userTripTeamRepository.isUserLeader(userId, tripTeamId);
+    }
+
     private UserTripTeam getUserTripTeamAndValidLeader(Long userId, Long tripTeamId) {
         UserTripTeam userTripTeam = userTripTeamRepository.getUserTripTeamByUserIdAndTeamId(userId, tripTeamId)
                 .orElseThrow(() -> new NotFoundException("유효하지 않은 입력"));

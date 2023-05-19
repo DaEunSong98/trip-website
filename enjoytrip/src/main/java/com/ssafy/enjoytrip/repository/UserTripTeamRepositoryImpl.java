@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
+import com.ssafy.enjoytrip.domain.team_relation.TeamRole;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -52,5 +53,15 @@ public class UserTripTeamRepositoryImpl implements UserTripTeamRepositoryCustom{
         queryFactory.delete(userTripTeam)
                 .where(userTripTeam.tripTeam.tripTeamId.eq(tripTeamId))
                 .execute();
+    }
+
+    @Override
+    public boolean isUserLeader(Long userId, Long tripTeamId) {
+        return queryFactory.selectFrom(userTripTeam)
+                .where(userTripTeam.user.userId.eq(userId)
+                        .and(userTripTeam.tripTeam.tripTeamId.eq(tripTeamId))
+                        .and(userTripTeam.teamRole.eq(TeamRole.LEADER))
+                )
+                .fetchFirst() != null;
     }
 }

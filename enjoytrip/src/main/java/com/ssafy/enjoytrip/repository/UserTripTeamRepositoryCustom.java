@@ -14,4 +14,6 @@ public interface UserTripTeamRepositoryCustom {
     List<UserTripTeam> findAllUserTripTeamByUserId(Long userId);
 
     void deleteUserTripTeamByTripTeamId(Long tripTeamId);
+
+    boolean isUserLeader(Long userId, Long tripTeamId);
 }
