@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.token.interceptor;
 
+import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.util.JwtUtil;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.service.UserService;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +40,14 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        if (HttpMethod.GET.matches(request.getMethod())) {
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
+
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        LoginRequired loginRequired = handlerMethod.getMethodAnnotation(LoginRequired.class);
+
+        if (Objects.isNull(loginRequired) && HttpMethod.GET.matches(request.getMethod())) {
             return true;
         }
 

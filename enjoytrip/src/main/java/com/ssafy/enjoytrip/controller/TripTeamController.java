@@ -10,6 +10,7 @@ import com.ssafy.enjoytrip.dto.response.TripTeamResponseDto;
 import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
 import com.ssafy.enjoytrip.service.TripPlanService;
 import com.ssafy.enjoytrip.service.TripTeamService;
+import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +73,7 @@ public class TripTeamController {
     }
 
 
+    @LoginRequired
     @GetMapping("/{tripTeamId}/invite/{userTripTeamId}")
     @ResponseStatus(HttpStatus.OK)
     public UserTripTeamForm getUserTripTeamForm(@PathVariable Long tripTeamId, @PathVariable Long userTripTeamId) {
@@ -124,6 +126,7 @@ public class TripTeamController {
         tripPlanService.addPlanAttractions(user.getUserId(), tripTeamId, tripPlanId, attractionInfo);
     }
 
+    @LoginRequired
     @GetMapping("/{tripTeamId}/{tripPlanId}")
     @ResponseStatus(HttpStatus.OK)
     public TripPlanResponseDto getTripPlan(@PathVariable Long tripTeamId,
@@ -150,6 +153,7 @@ public class TripTeamController {
 
     @GetMapping("/{tripTeamId}/user/leader")
     @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
     public boolean validLeader(@PathVariable Long tripTeamId, HttpServletRequest request) {
         log.info("validLeader");
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
