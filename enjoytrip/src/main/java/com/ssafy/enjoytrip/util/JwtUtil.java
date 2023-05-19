@@ -21,7 +21,7 @@ public class JwtUtil {
     public static final String ACCESS_TOKEN_NAME = "access-token";
     public static final String REFRESH_TOKEN_NAME = "refresh-token";
 
-    private static final int ACCESS_TOKEN_EXPIRE_MIN = 60;
+    private static final int ACCESS_TOKEN_EXPIRE_MIN = 1;
     private static final int REFRESH_TOKEN_EXPIRE_MIN = 2;
 
     public <T> String create(String key, T data, String subject, long expire) {
