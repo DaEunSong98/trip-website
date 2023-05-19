@@ -3,7 +3,6 @@ package com.ssafy.enjoytrip.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.enjoytrip.domain.Board;
-import com.ssafy.enjoytrip.domain.QBoardImage;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
 import org.springframework.util.StringUtils;
 
@@ -52,4 +51,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return Optional.ofNullable(board1);
     }
 
+    @Override
+    public boolean isBoardWriter(Long userId, Long boardId) {
+        return queryFactory.selectFrom(board)
+                .where(board.user.userId.eq(userId)
+                        .and(board.boardId.eq(boardId)))
+                .fetchFirst() != null;
+    }
 }

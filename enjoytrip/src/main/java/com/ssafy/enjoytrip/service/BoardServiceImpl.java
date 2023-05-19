@@ -85,4 +85,9 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
         findBoard.updateBoard(boardUpdateDto.getContent());
     }
+
+    @Override
+    public boolean isBoardWriter(Long userId, Long boardId) {
+        return boardRepository.isBoardWriter(userId, boardId);
+    }
 }

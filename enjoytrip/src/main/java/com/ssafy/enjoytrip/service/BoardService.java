@@ -18,4 +18,6 @@ public interface BoardService {
     void addBoard(Board board, Long userId, List<BoardImage> boardImages);
 
     void updateBoard(BoardUpdateDto boardUpdateDto);
+
+    boolean isBoardWriter(Long userId, Long boardId);
 }

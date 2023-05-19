@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.dto.response.BoardDetailResponseDto;
 import com.ssafy.enjoytrip.dto.response.BoardListResponseDto;
+import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.util.FileStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -91,4 +92,11 @@ public class BoardController {
 		return ResponseEntity.ok().build();
 	}
 
+	@LoginRequired
+	@GetMapping("/{boardId}/validWriter")
+	@ResponseStatus(HttpStatus.OK)
+	public boolean isWriter(@PathVariable long boardId, HttpServletRequest request) {
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		return boardService.isBoardWriter(user.getUserId(), boardId);
+	}
 }

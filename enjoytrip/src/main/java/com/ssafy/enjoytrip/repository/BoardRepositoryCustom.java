@@ -14,4 +14,6 @@ public interface BoardRepositoryCustom {
     List<Board> searchAllBoard(BoardSearch boardSearch);
 
     Optional<Board> findBoardByBoardId(Long boardId);
+
+    boolean isBoardWriter(Long userId, Long boardId);
 }
