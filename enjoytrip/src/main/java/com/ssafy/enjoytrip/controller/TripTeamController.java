@@ -6,6 +6,7 @@ import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
 import com.ssafy.enjoytrip.dto.request.UserInviteDto;
 import com.ssafy.enjoytrip.dto.response.TripPlanResponseDto;
+import com.ssafy.enjoytrip.dto.response.TripTeamListResponse;
 import com.ssafy.enjoytrip.dto.response.TripTeamResponseDto;
 import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
 import com.ssafy.enjoytrip.service.TripPlanService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ssafy.enjoytrip.token.LoginTokenConst.USER_INFO;
 
@@ -158,5 +160,14 @@ public class TripTeamController {
         log.info("validLeader");
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
         return tripTeamService.validUserIsLeader(user.getUserId(), tripTeamId);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
+    public List<TripTeamListResponse> getAllTripTeam(HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        return tripTeamService.getAllTripTeamByUserId(user.getUserId())
+                .stream().map(TripTeamListResponse::new).collect(Collectors.toList());
     }
 }

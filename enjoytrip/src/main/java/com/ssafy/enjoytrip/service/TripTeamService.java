@@ -23,4 +23,6 @@ public interface TripTeamService {
     List<UserTripTeam> getAllUserTripTeam(Long userId);
 
     boolean validUserIsLeader(Long userId, Long tripTeamId);
+
+    List<TripTeam> getAllTripTeamByUserId(Long userId);
 }

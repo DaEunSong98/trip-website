@@ -1,14 +1,12 @@
 package com.ssafy.enjoytrip.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.enjoytrip.domain.QTripPlan;
 import com.ssafy.enjoytrip.domain.TripTeam;
-import com.ssafy.enjoytrip.domain.team_relation.TeamRole;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
-import static com.ssafy.enjoytrip.domain.QTripPlan.*;
 import static com.ssafy.enjoytrip.domain.QTripTeam.*;
 import static com.ssafy.enjoytrip.domain.QUser.*;
 import static com.ssafy.enjoytrip.domain.QUserTripTeam.*;
@@ -32,4 +30,11 @@ public class TripTeamRepositoryImpl implements TripTeamRepositoryCustom {
         return Optional.ofNullable(findTripTeam);
     }
 
+    @Override
+    public List<TripTeam> findTripTeamListByUserId(Long userId) {
+        return queryFactory.selectFrom(tripTeam)
+                .join(tripTeam.userTripTeams, userTripTeam).fetchJoin()
+                .where(userTripTeam.user.userId.eq(userId))
+                .fetch();
+    }
 }
