@@ -40,17 +40,23 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         String accessToken = request.getHeader(JwtUtil.ACCESS_TOKEN_NAME);
 
+        log.info("accessToken = {}", accessToken);
+
         if (jwtUtil.checkToken(accessToken)) {
             LoginTokenInfo loginTokenInfo = jwtUtil.parseToken(accessToken);
+            log.info("parse result : {}, {}", loginTokenInfo.getUserId(), loginTokenInfo.getNickName());
             request.setAttribute(USER_INFO, loginTokenInfo);
             return true;
         }
 
         String refreshToken = request.getHeader(JwtUtil.REFRESH_TOKEN_NAME);
 
+        log.info("refreshToken = {}", refreshToken);
+
         if (jwtUtil.checkToken(refreshToken)) {
             LoginTokenInfo loginTokenInfo = jwtUtil.parseToken(refreshToken);
             User user = userService.findUserById(loginTokenInfo.getUserId());
+            log.info("parse result : {}, {}", loginTokenInfo.getUserId(), loginTokenInfo.getNickName());
 
             if (user.getRefreshToken().equals(refreshToken)) {
                 String newAccessToken = jwtUtil.createAccessToken(LoginTokenConst.LOGIN_TOKEN, loginTokenInfo);
@@ -60,6 +66,8 @@ public class TokenInterceptor implements HandlerInterceptor {
             }
 
         }
+
+        log.info("auth fail");
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         return false;

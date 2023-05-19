@@ -86,6 +86,7 @@ public class BoardController {
 	@DeleteMapping("/{boardId}")
 	public ResponseEntity<?> deleteBoard(@PathVariable long boardId, HttpServletRequest request) {
 		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		log.info("user = {}", user);
 		boardService.deleteBoard(boardId, user.getUserId());
 		return ResponseEntity.ok().build();
 	}
