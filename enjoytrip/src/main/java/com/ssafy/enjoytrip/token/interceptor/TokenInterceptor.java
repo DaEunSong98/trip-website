@@ -38,6 +38,10 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if (HttpMethod.GET.matches(request.getMethod())) {
+            return true;
+        }
+
         String accessToken = request.getHeader(JwtUtil.ACCESS_TOKEN_NAME);
 
         log.info("accessToken = {}", accessToken);
