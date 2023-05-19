@@ -13,4 +13,6 @@ public interface CommentRepositoryCustom {
     Optional<Comment> findCommentByIdUsingFetchJoin(Long commentId);
 
     void deleteCommentByBoardId(Long boardId);
+
+    boolean isCommentWriter(Long userId, Long commentId);
 }

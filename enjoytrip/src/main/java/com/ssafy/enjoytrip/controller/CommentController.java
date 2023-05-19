@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ssafy.enjoytrip.dto.response.CommentResponseDto;
+import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,4 +64,11 @@ public class CommentController {
 		return new ResponseEntity<List<Book>>(HttpStatus.OK);
 	}
 
+	@LoginRequired
+	@GetMapping("/{boardId}/comments/{commentId}/validWriter")
+	@ResponseStatus(HttpStatus.OK)
+	public boolean isWriter(@PathVariable long commentId, HttpServletRequest request) {
+		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		return commentService.isCommentWriter(user.getUserId(), commentId);
+	}
 }

@@ -46,4 +46,12 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
                 .where(comment.board.boardId.eq(boardId))
                 .execute();
     }
+
+    @Override
+    public boolean isCommentWriter(Long userId, Long commentId) {
+        return queryFactory.selectFrom(comment)
+                .where(comment.user.userId.eq(userId)
+                        .and(comment.commentId.eq(commentId)))
+                .fetchFirst() != null;
+    }
 }

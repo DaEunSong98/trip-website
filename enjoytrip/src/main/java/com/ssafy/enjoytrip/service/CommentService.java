@@ -14,4 +14,6 @@ public interface CommentService {
     void editComment(Long commentId, String content, Long userId);
 
     void deleteComment(Long commentId, Long userId);
+
+    boolean isCommentWriter(Long userId, Long commentId);
 }

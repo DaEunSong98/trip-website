@@ -66,4 +66,9 @@ public class CommentServiceImpl implements CommentService {
         }
         commentRepository.delete(comment);
     }
+
+    @Override
+    public boolean isCommentWriter(Long userId, Long commentId) {
+        return commentRepository.isCommentWriter(userId, commentId);
+    }
 }
