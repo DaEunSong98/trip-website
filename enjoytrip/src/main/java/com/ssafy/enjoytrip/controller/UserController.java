@@ -65,7 +65,7 @@ public class UserController {
 	}
 
 	// 중복 체크
-	@GetMapping("/login/duplicate")
+	@GetMapping("/signup/duplicate")
 	@ResponseStatus(HttpStatus.OK)
 	public boolean duplicateCheck(@ModelAttribute(name = "loginId") String loginId) {
 		log.info("loginId = {}", loginId);

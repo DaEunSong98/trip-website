@@ -18,7 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor)
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/error", "/attraction/**", "/user/login/**", "/user/signup", "/board", "/board/{boardId}/comments");
+                .excludePathPatterns("/", "/error", "/attraction/**", "/user/login/**", "/user/signup/**", "/board", "/board/{boardId}/comments");
     }
 
     @Override
