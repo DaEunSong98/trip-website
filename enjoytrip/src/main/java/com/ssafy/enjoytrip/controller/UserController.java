@@ -4,6 +4,7 @@ package com.ssafy.enjoytrip.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ssafy.enjoytrip.dto.response.*;
 import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.util.JwtUtil;
 import com.ssafy.enjoytrip.domain.UserRelationship;
@@ -11,10 +12,6 @@ import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.domain.user_relation.Relation;
 import com.ssafy.enjoytrip.dto.request.UserJoinDto;
 import com.ssafy.enjoytrip.dto.request.UserSearch;
-import com.ssafy.enjoytrip.dto.response.RelationshipResponseDto;
-import com.ssafy.enjoytrip.dto.response.TokenResponseDto;
-import com.ssafy.enjoytrip.dto.response.UserResponseDto;
-import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
 import com.ssafy.enjoytrip.service.TripTeamService;
 import com.ssafy.enjoytrip.service.UserRelationshipService;
 import lombok.extern.slf4j.Slf4j;
@@ -102,8 +99,16 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@GetMapping("/getUserId")
+	@LoginRequired
+	public UserIdResponseDto getUserId(HttpServletRequest request) {
+		LoginTokenInfo userInfo = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		return new UserIdResponseDto(userInfo.getUserId());
+	}
+
 	//회원 상세 정보 조회
 	@GetMapping("/{userId}")
+	@LoginRequired
 	public ResponseEntity<User> getUserDetail(@PathVariable long userId, HttpServletRequest request) {
 		LoginTokenInfo userInfo = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		if (userInfo.getUserId() != userId) {
