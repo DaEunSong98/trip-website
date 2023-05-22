@@ -37,6 +37,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         log.info("call TokenInterceptor");
 
         if (isPreflightRequest(request)) {
+            log.info("isPreflightRequest");
             return true;
         }
 
