@@ -4,6 +4,7 @@ package com.ssafy.enjoytrip.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.util.JwtUtil;
 import com.ssafy.enjoytrip.domain.UserRelationship;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
@@ -136,10 +137,13 @@ public class UserController {
 	}
 
 	@GetMapping("/invite")
+	@LoginRequired
 	@ResponseStatus(HttpStatus.OK)
 	public List<UserTripTeamForm> allInviteInfo(HttpServletRequest request) {
 		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+		log.info("user = {}", user.getUserId());
 		List<UserTripTeam> allUserTripTeam = tripTeamService.getAllUserTripTeam(user.getUserId());
+		log.info("allUserTripTeam = {}", allUserTripTeam);
 		return allUserTripTeam.stream().map(UserTripTeamForm::new).collect(Collectors.toList());
 	}
 
