@@ -58,10 +58,10 @@ public class BoardController {
 
 	//게시글 등록
 	@PostMapping("/write")
-	public ResponseEntity<?> registerBoard(@RequestBody Board board, @RequestParam(value = "images", required = false) List<MultipartFile> images, HttpServletRequest request) throws IOException {
+	public ResponseEntity<?> registerBoard(@RequestParam String title, @RequestParam String content, @RequestParam(value = "images", required = false) List<MultipartFile> images, HttpServletRequest request) throws IOException {
 		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		List<BoardImage> boardImages = fileStore.storeImages(images);
-
+		Board board = Board.builder().title(title).content(content).build();
 		log.info("board = {}, {}, {}", board, user, images);
 
 		boardService.addBoard(board, user.getUserId(), boardImages);
