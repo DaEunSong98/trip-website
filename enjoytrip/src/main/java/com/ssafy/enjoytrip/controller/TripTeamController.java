@@ -4,6 +4,7 @@ import com.ssafy.enjoytrip.domain.TripPlan;
 import com.ssafy.enjoytrip.domain.TripTeam;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
+import com.ssafy.enjoytrip.dto.request.TripTeamAddRequestDto;
 import com.ssafy.enjoytrip.dto.request.UserInviteDto;
 import com.ssafy.enjoytrip.dto.response.TripPlanResponseDto;
 import com.ssafy.enjoytrip.dto.response.TripTeamListResponse;
@@ -16,7 +17,6 @@ import com.ssafy.enjoytrip.token.LoginTokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,15 +38,11 @@ public class TripTeamController {
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.OK)
-    public String addTripTeam(@RequestBody String teamName, HttpServletRequest request) {
+    public String addTripTeam(@RequestBody @Valid TripTeamAddRequestDto tripTeamAddRequestDto, HttpServletRequest request) {
 
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 
-        if (!StringUtils.hasText(teamName)) {
-            throw new IllegalArgumentException("이름을 입력해주세요");
-        }
-
-        tripTeamService.makeTripTeam(user.getUserId(), teamName);
+        tripTeamService.makeTripTeam(user.getUserId(), tripTeamAddRequestDto.getTeamName());
 
         return "생성이 완료되었습니다";
     }
