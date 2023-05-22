@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class BoardDetailResponseDto {
@@ -13,7 +14,7 @@ public class BoardDetailResponseDto {
     private String title;
     private String content;
     private String nickname;
-    private List<BoardImage> imageList;
+    private List<BoardImageResponseDto> imageList;
     private LocalDateTime createdDate;
 
     public BoardDetailResponseDto(Board board) {
@@ -21,7 +22,7 @@ public class BoardDetailResponseDto {
         this.title = board.getTitle();
         this.content = board.getContent();
         this.nickname = board.getUser().getNickname();
-        this.imageList = board.getBoardImages();
+        this.imageList = board.getBoardImages().stream().map(BoardImageResponseDto::new).collect(Collectors.toList());
         this.createdDate = board.getCreatedDate();
     }
 }
