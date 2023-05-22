@@ -52,6 +52,9 @@ public class TripTeamController {
     public String inviteUser(@RequestBody @Valid UserInviteDto userInviteDto, HttpServletRequest request) {
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 
+        log.info("userInviteDto.getUserId() = {}", userInviteDto.getUserId());
+        log.info("userInviteDto.getTeamId() = {}", userInviteDto.getTeamId());
+
         tripTeamService.inviteUser(user.getUserId(), userInviteDto.getUserId(), userInviteDto.getTeamId());
 
         return "생성이 완료되었습니다";
