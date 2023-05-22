@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.util;
 
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.exception.NotImageException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,10 +16,11 @@ import java.util.UUID;
 /**
  * 파일 저장을 위한 유틸 클래스
  */
+@Slf4j
 @Component
 public class FileStore {
 
-    @Value("file.dir")
+    @Value("${file.dir}")
     private String fileDir;
 
     public String getFilePath(String fileName) {
@@ -63,6 +65,7 @@ public class FileStore {
 
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
+        log.info("file Path = {}", getFilePath(storeFileName));
         multipartFile.transferTo(new File(getFilePath(storeFileName)));
         
         return BoardImage.builder().userFileName(originalFilename).storedFileName(storeFileName).build();
