@@ -4,7 +4,6 @@ import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
-import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.util.FileStore;
 import com.ssafy.enjoytrip.repository.BoardImageRepository;
@@ -80,10 +79,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateBoard(BoardUpdateDto boardUpdateDto) {
-        Board findBoard = boardRepository.findById(boardUpdateDto.getBoardId())
+    public void updateBoard(Long boardId, String title, String content, List<BoardImage> boardImages) {
+        Board findBoard = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
-        findBoard.updateBoard(boardUpdateDto.getContent());
+        findBoard.getBoardImages().forEach(boardImage -> fileStore.deleteFile(boardImage.getStoredFileName()));
+        findBoard.updateBoard(title, content, boardImages);
     }
 
     @Override

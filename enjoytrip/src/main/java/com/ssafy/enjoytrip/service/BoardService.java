@@ -3,7 +3,6 @@ package com.ssafy.enjoytrip.service;
 import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.domain.BoardImage;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
-import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public interface BoardService {
 
     void addBoard(Board board, Long userId, List<BoardImage> boardImages);
 
-    void updateBoard(BoardUpdateDto boardUpdateDto);
+    void updateBoard(Long boardId, String title, String content, List<BoardImage> boardImages);
 
     boolean isBoardWriter(Long userId, Long boardId);
 }

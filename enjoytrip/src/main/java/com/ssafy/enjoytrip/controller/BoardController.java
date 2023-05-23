@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.enjoytrip.domain.Board;
 import com.ssafy.enjoytrip.dto.request.BoardSearch;
-import com.ssafy.enjoytrip.dto.request.BoardUpdateDto;
 import com.ssafy.enjoytrip.service.BoardService;
 import com.ssafy.enjoytrip.token.LoginTokenInfo;
 
@@ -83,13 +82,14 @@ public class BoardController {
 
 	//게시글 수정
 	@PatchMapping("/{boardId}")
-	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestBody @Valid BoardUpdateDto boardUpdateDto, HttpServletRequest request) {
+	protected ResponseEntity<?> modifyBoard(@PathVariable long boardId, @RequestParam String title, @RequestParam String content, @RequestParam(value = "images", required = false) List<MultipartFile> images, HttpServletRequest request) throws IOException {
 		LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
 		Board board = boardService.getBoardDetail(boardId);
 		if (!board.getUser().getUserId().equals(user.getUserId())) {
 			throw new IllegalArgumentException("잘못된 접근입니다.");
 		}
-		boardService.updateBoard(boardUpdateDto);
+		List<BoardImage> boardImages = fileStore.storeImages(images);
+		boardService.updateBoard(boardId, title, content, boardImages);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
