@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,8 @@ import com.ssafy.enjoytrip.dto.response.BoardListResponseDto;
 import com.ssafy.enjoytrip.token.LoginRequired;
 import com.ssafy.enjoytrip.util.FileStore;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +71,14 @@ public class BoardController {
 
 		return new ResponseEntity<>(HttpStatus.OK);
 
+	}
+
+	//이미지 출력
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/images/{fileName}")
+	public Resource getImages(@PathVariable String fileName) throws MalformedURLException {
+		log.info("fileName = {}", fileName);
+		return new UrlResource("file:" + fileStore.getFilePath(fileName));
 	}
 
 	//게시글 수정
