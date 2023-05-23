@@ -34,7 +34,7 @@ public class TripTeamRepositoryImpl implements TripTeamRepositoryCustom {
     public List<TripTeam> findTripTeamListByUserId(Long userId) {
         return queryFactory.selectFrom(tripTeam)
                 .join(tripTeam.userTripTeams, userTripTeam).fetchJoin()
-                .where(userTripTeam.user.userId.eq(userId))
+                .where(userTripTeam.user.userId.eq(userId).and(userTripTeam.accepted).isTrue())
                 .fetch();
     }
 }
