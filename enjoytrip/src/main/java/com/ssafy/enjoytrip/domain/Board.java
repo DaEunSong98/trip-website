@@ -37,7 +37,8 @@ public class Board extends BaseTimeEntity {
     public void updateBoard(String title, String content, List<BoardImage> boardImages) {
         this.title = title;
         this.content = content;
-        this.boardImages = boardImages;
+        this.boardImages = new ArrayList<>();
+        boardImages.forEach(this::addImage);
     }
 
     public void setUser(User user) {

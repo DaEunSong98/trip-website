@@ -82,7 +82,10 @@ public class BoardServiceImpl implements BoardService {
     public void updateBoard(Long boardId, String title, String content, List<BoardImage> boardImages) {
         Board findBoard = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException("잘못된 접근입니다."));
-        findBoard.getBoardImages().forEach(boardImage -> fileStore.deleteFile(boardImage.getStoredFileName()));
+        for (BoardImage boardImage : findBoard.getBoardImages()) {
+            fileStore.deleteFile(boardImage.getStoredFileName());
+            boardImageRepository.delete(boardImage);
+        }
         findBoard.updateBoard(title, content, boardImages);
     }
 
