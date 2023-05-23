@@ -35,17 +35,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IllegalArgumentException.class, NotImageException.class})
     public ErrorResponse illegalArgsExceptionHandle(RuntimeException e) {
-        ErrorResponse response = ErrorResponse.builder().code("400").message(e.getMessage()).build();
-
-        return response;
+        return ErrorResponse.builder().code("400").message(e.getMessage()).build();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(LoginException.class)
     public ErrorResponse illegalArgsExceptionHandle(LoginException e) {
-        ErrorResponse response = ErrorResponse.builder().code("200").message(e.getMessage()).build();
-
-        return response;
+        return ErrorResponse.builder().code("200").message(e.getMessage()).build();
     }
 }
