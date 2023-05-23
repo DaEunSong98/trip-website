@@ -7,7 +7,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ssafy.enjoytrip.domain.QAttractionInfo.attractionInfo;
+import static com.ssafy.enjoytrip.domain.QGugun.gugun;
 import static com.ssafy.enjoytrip.domain.QPlanAttraction.*;
+import static com.ssafy.enjoytrip.domain.QSido.sido;
 import static com.ssafy.enjoytrip.domain.QTripPlan.*;
 import static com.ssafy.enjoytrip.domain.QTripTeam.*;
 
@@ -24,7 +27,9 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
         TripPlan findTripPlan = queryFactory
                 .selectFrom(tripPlan)
                 .join(tripPlan.tripTeam, tripTeam).fetchJoin()
-                .where(tripPlan.tripPlanId.eq(tripPlanId))
+                .innerJoin(attractionInfo.sido, sido).fetchJoin()
+                .innerJoin(attractionInfo.gugun, gugun).fetchJoin()
+                .where(tripPlan.tripPlanId.eq(tripPlanId).and(gugun.sido.eq(sido)))
                 .fetchOne();
         return Optional.ofNullable(findTripPlan);
     }
