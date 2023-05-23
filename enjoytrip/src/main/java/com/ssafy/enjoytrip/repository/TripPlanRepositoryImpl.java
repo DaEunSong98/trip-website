@@ -45,9 +45,8 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
         TripPlan findTripPlan = queryFactory
                 .selectFrom(tripPlan)
                 .leftJoin(tripPlan.planAttractions, planAttraction).fetchJoin()
-                .innerJoin(planAttraction.attractionInfo.sido, sido).fetchJoin()
-                .innerJoin(planAttraction.attractionInfo.gugun, gugun).fetchJoin()
-                .where(tripPlan.tripPlanId.eq(tripPlanId).and(gugun.sido.eq(sido)))
+                .leftJoin(planAttraction.attractionInfo, attractionInfo).fetchJoin()
+                .where(tripPlan.tripPlanId.eq(tripPlanId))
                 .fetchOne();
         return Optional.ofNullable(findTripPlan);
     }
