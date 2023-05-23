@@ -39,6 +39,13 @@ class TripTeamServiceImplTest {
     }
 
     @Test
+    @DisplayName("팀 생성 테스트")
+    @Transactional
+    void test1() {
+        tripTeamService.makeTripTeam(userId, "테스트팀1");
+    }
+
+    @Test
     @DisplayName("유저 초대 테스트")
     @Transactional
     void test2() {
@@ -47,6 +54,8 @@ class TripTeamServiceImplTest {
         TripTeam tripTeam = tripTeamService.findTripTeam(tripTeamId);
         Long inviteUserId = inviteUser.getUserId();
         em.flush();
+
+        tripTeamService.inviteUser(userId, inviteUserId, tripTeamId);
 
         TripTeam tripTeam2 = tripTeamService.findTripTeam(tripTeamId);
         for (UserTripTeam team : tripTeam2.getUserTripTeams()) {
