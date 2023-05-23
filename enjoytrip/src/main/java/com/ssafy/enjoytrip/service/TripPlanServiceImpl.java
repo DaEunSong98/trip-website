@@ -28,7 +28,13 @@ public class TripPlanServiceImpl implements TripPlanService{
 
         UserTripTeam userTripTeam = getUserTripTeam(userId, tripTeamId);
 
-        TripPlan tripPlan = TripPlan.builder().planContent(planContent).planName(planName).tripTeam(userTripTeam.getTripTeam()).build();
+        TripPlan tripPlan = TripPlan.builder()
+                .planContent(planContent)
+                .planName(planName)
+                .tripTeam(userTripTeam.getTripTeam())
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
         tripPlanRepository.save(tripPlan);
     }
 

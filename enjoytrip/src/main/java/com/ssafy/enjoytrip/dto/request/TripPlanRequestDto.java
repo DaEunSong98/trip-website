@@ -1,22 +1,23 @@
 package com.ssafy.enjoytrip.dto.request;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
 public class TripPlanRequestDto {
 
-    @NotBlank
+    @NotNull
     private String planName;
 
-    @NotBlank
+    @NotNull
     private String planContent;
 
-    @NotBlank
+    @NotNull
     private LocalDate startDate;
 
-    @NotBlank
+    @NotNull
     private LocalDate endDate;
 }

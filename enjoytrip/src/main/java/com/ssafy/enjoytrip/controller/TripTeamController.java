@@ -109,6 +109,7 @@ public class TripTeamController {
     @ResponseStatus(HttpStatus.OK)
     public String addTripPlan(@PathVariable Long tripTeamId, @RequestBody TripPlanRequestDto tripPlanRequestDto, HttpServletRequest request) {
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        log.info("tripPlanRequestDto.getStartDate() = {}", tripPlanRequestDto.getStartDate());
         tripPlanService.makeTripPlan(
                 user.getUserId(), tripTeamId, tripPlanRequestDto.getPlanName(), tripPlanRequestDto.getPlanContent(), tripPlanRequestDto.getStartDate(), tripPlanRequestDto.getEndDate());
         return "계획 생성이 완료되었습니다.";
