@@ -6,10 +6,7 @@ import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
 import com.ssafy.enjoytrip.dto.request.TripTeamAddRequestDto;
 import com.ssafy.enjoytrip.dto.request.UserInviteDto;
-import com.ssafy.enjoytrip.dto.response.TripPlanResponseDto;
-import com.ssafy.enjoytrip.dto.response.TripTeamListResponse;
-import com.ssafy.enjoytrip.dto.response.TripTeamResponseDto;
-import com.ssafy.enjoytrip.dto.response.UserTripTeamForm;
+import com.ssafy.enjoytrip.dto.response.*;
 import com.ssafy.enjoytrip.service.TripPlanService;
 import com.ssafy.enjoytrip.service.TripTeamService;
 import com.ssafy.enjoytrip.token.LoginRequired;
@@ -67,10 +64,12 @@ public class TripTeamController {
         return new TripTeamResponseDto(tripTeam);
     }
 
+    @LoginRequired
     @GetMapping("/{tripTeamId}/plans")
     @ResponseStatus(HttpStatus.OK)
-    public List<TripPlan> getTripPlansOfTripTeam(@PathVariable Long tripTeamId) {
-        return tripPlanService.getTripPlansByTripTeamId(tripTeamId);
+    public List<TripPlanListResponseDto> getTripPlansOfTripTeam(@PathVariable Long tripTeamId) {
+        return tripPlanService.getTripPlansByTripTeamId(tripTeamId)
+                .stream().map(TripPlanListResponseDto::new).collect(Collectors.toList());
     }
 
 
