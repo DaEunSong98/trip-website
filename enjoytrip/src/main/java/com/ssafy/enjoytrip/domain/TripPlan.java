@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class TripPlan extends BaseTimeEntity {
 
     @Id
