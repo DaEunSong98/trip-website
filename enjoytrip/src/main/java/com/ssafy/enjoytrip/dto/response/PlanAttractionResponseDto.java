@@ -1,6 +1,5 @@
 package com.ssafy.enjoytrip.dto.response;
 
-import com.ssafy.enjoytrip.domain.AttractionInfo;
 import com.ssafy.enjoytrip.domain.PlanAttraction;
 import lombok.Data;
 
@@ -19,10 +18,6 @@ public class PlanAttractionResponseDto {
 
     private String tel;
 
-    private String sidoName;
-
-    private String gugunName;
-
     public PlanAttractionResponseDto(PlanAttraction planAttraction) {
         this.planAttractionId = planAttraction.getPlanAttractionId();
         this.contentTypeId = planAttraction.getAttractionInfo().getContentTypeId();
@@ -30,7 +25,5 @@ public class PlanAttractionResponseDto {
         this.addr1 = planAttraction.getAttractionInfo().getAddr1();
         this.zipcode = planAttraction.getAttractionInfo().getZipcode();
         this.tel = planAttraction.getAttractionInfo().getTel();
-        this.sidoName = planAttraction.getAttractionInfo().getSido().getSidoName();
-        this.gugunName = planAttraction.getAttractionInfo().getGugun().getGugunName();
     }
 }
