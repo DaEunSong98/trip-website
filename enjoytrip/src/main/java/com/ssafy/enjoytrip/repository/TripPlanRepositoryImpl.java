@@ -47,6 +47,7 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
                 .leftJoin(tripPlan.planAttractions, planAttraction).fetchJoin()
                 .leftJoin(planAttraction.attractionInfo, attractionInfo).fetchJoin()
                 .where(tripPlan.tripPlanId.eq(tripPlanId))
+                .orderBy(planAttraction.planOrder.asc())
                 .fetchOne();
         return Optional.ofNullable(findTripPlan);
     }
