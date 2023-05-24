@@ -24,6 +24,8 @@ public class PlanAttraction extends BaseTimeEntity {
     @JoinColumn(name = "trip_plan_id")
     private TripPlan tripPlan;
 
+    private Long planOrder;
+
     public void addTripPlan(TripPlan tripPlan){
         this.tripPlan = tripPlan;
     }

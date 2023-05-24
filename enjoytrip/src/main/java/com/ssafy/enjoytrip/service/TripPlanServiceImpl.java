@@ -50,10 +50,11 @@ public class TripPlanServiceImpl implements TripPlanService{
             throw new IllegalArgumentException("해당 팀의 계획이 아닙니다");
         }
 
+        long order = 1;
         for(Integer attractionId: attractionIdList){
             AttractionInfo attractionInfo = attractionInfoRepository.findById(attractionId)
                     .orElseThrow(() -> new NotFoundException("유효하지 않은 관광지"));
-            PlanAttraction planAttraction = PlanAttraction.builder().attractionInfo(attractionInfo).build();
+            PlanAttraction planAttraction = PlanAttraction.builder().attractionInfo(attractionInfo).planOrder(order++).build();
             tripPlan.addPlanAttraction(planAttraction);
         }
     }
