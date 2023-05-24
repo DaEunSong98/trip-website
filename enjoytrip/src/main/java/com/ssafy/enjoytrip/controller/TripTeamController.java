@@ -120,11 +120,12 @@ public class TripTeamController {
     public void addAttraction(
             @PathVariable Long tripTeamId,
             @PathVariable Long tripPlanId,
-            @RequestBody List<Integer> attractionInfo,
+            @RequestBody List<AttractionListResponseDto> attractionInfo,
             HttpServletRequest request
     ) {
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
-        tripPlanService.addPlanAttractions(user.getUserId(), tripTeamId, tripPlanId, attractionInfo);
+        List<Integer> attractionIdList = attractionInfo.stream().map(AttractionListResponseDto::getContentId).collect(Collectors.toList());
+        tripPlanService.addPlanAttractions(user.getUserId(), tripTeamId, tripPlanId, attractionIdList);
     }
 
     @LoginRequired
