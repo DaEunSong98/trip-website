@@ -3,6 +3,7 @@ package com.ssafy.enjoytrip.controller;
 import com.ssafy.enjoytrip.domain.TripPlan;
 import com.ssafy.enjoytrip.domain.TripTeam;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
+import com.ssafy.enjoytrip.dto.request.AttractionAddRequestDto;
 import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
 import com.ssafy.enjoytrip.dto.request.TripTeamAddRequestDto;
 import com.ssafy.enjoytrip.dto.request.UserInviteDto;
@@ -120,11 +121,11 @@ public class TripTeamController {
     public void addAttraction(
             @PathVariable Long tripTeamId,
             @PathVariable Long tripPlanId,
-            @RequestBody List<AttractionListResponseDto> attractionInfo,
+            @RequestBody List<AttractionAddRequestDto> attractionInfo,
             HttpServletRequest request
     ) {
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
-        List<Integer> attractionIdList = attractionInfo.stream().map(AttractionListResponseDto::getContentId).collect(Collectors.toList());
+        List<Integer> attractionIdList = attractionInfo.stream().map(AttractionAddRequestDto::getContentId).collect(Collectors.toList());
         tripPlanService.addPlanAttractions(user.getUserId(), tripTeamId, tripPlanId, attractionIdList);
     }
 
