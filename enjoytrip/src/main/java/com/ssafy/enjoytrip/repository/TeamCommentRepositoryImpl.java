@@ -61,6 +61,7 @@ public class TeamCommentRepositoryImpl implements TeamCommentRepositoryCustom {
     @Override
     public void deleteAllCommentByTeam(List<TeamBoard> teamBoards) {
         queryFactory.delete(teamComment)
-                .where(teamComment.teamBoard.in(teamBoards));
+                .where(teamComment.teamBoard.in(teamBoards))
+                .execute();
     }
 }

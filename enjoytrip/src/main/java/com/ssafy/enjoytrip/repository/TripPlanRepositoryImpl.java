@@ -52,8 +52,11 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
 
     @Override
     public void deleteTripPlanByTripTeamId(Long tripTeamId) {
+        List<TripPlan> result = queryFactory.selectFrom(tripPlan)
+                .where(tripPlan.tripTeam.tripTeamId.eq(tripTeamId))
+                .fetch();
         queryFactory.delete(planAttraction)
-                        .where(planAttraction.tripPlan.tripTeam.tripTeamId.eq(tripTeamId))
+                        .where(planAttraction.tripPlan.in(result))
                                 .execute();
         queryFactory.delete(tripPlan)
                 .where(tripPlan.tripTeam.tripTeamId.eq(tripTeamId))

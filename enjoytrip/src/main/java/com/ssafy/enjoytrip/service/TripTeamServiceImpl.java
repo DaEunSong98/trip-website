@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.service;
 
+import com.ssafy.enjoytrip.domain.TeamBoard;
 import com.ssafy.enjoytrip.domain.TripTeam;
 import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
@@ -59,7 +60,8 @@ public class TripTeamServiceImpl implements TripTeamService {
     @Override
     public void deleteTripTeam(Long tripTeamId, Long userId) {
         getUserTripTeamAndValidLeader(userId, tripTeamId);
-        teamCommentRepository.deleteAllCommentByTeam(teamBoardRepository.findAllTeamBoardByTripTeam(tripTeamId));
+        List<TeamBoard> allBoards = teamBoardRepository.findAllTeamBoardByTripTeam(tripTeamId);
+        teamCommentRepository.deleteAllCommentByTeam(allBoards);
         teamBoardRepository.deleteTeamBoardByTeamId(tripTeamId);
         userTripTeamRepository.deleteUserTripTeamByTripTeamId(tripTeamId);
         tripPlanRepository.deleteTripPlanByTripTeamId(tripTeamId);
