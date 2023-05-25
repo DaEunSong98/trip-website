@@ -13,4 +13,6 @@ public interface TripPlanRepositoryCustom {
     Optional<TripPlan> findTripPlanByIdJoinPlanAttraction(Long tripPlanId);
 
     void deleteTripPlanByTripTeamId(Long tripTeamId);
+
+    Optional<Long> findMaxOrder(Long tripPlanId);
 }

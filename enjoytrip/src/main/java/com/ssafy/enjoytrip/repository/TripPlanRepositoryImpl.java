@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.enjoytrip.domain.QAttractionInfo.attractionInfo;
-import static com.ssafy.enjoytrip.domain.QGugun.gugun;
 import static com.ssafy.enjoytrip.domain.QPlanAttraction.*;
-import static com.ssafy.enjoytrip.domain.QSido.sido;
 import static com.ssafy.enjoytrip.domain.QTripPlan.*;
 import static com.ssafy.enjoytrip.domain.QTripTeam.*;
 
@@ -60,5 +58,14 @@ public class TripPlanRepositoryImpl implements TripPlanRepositoryCustom {
         queryFactory.delete(tripPlan)
                 .where(tripPlan.tripTeam.tripTeamId.eq(tripTeamId))
                 .execute();
+    }
+
+    @Override
+    public Optional<Long> findMaxOrder(Long tripPlanId) {
+        return Optional.ofNullable(queryFactory
+                .select(planAttraction.planOrder.max())
+                .from(planAttraction)
+                .where(planAttraction.tripPlan.tripPlanId.eq(tripPlanId))
+                .fetchOne());
     }
 }
