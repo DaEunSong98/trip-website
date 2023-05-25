@@ -3,6 +3,8 @@ package com.ssafy.enjoytrip.dto.response;
 import com.ssafy.enjoytrip.domain.PlanAttraction;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class PlanAttractionResponseDto {
 
@@ -18,6 +20,10 @@ public class PlanAttractionResponseDto {
 
     private String tel;
 
+    private BigDecimal latitude;
+
+    private BigDecimal longitude;
+
     public PlanAttractionResponseDto(PlanAttraction planAttraction) {
         this.planAttractionId = planAttraction.getPlanAttractionId();
         this.contentTypeId = planAttraction.getAttractionInfo().getContentTypeId();
@@ -25,5 +31,7 @@ public class PlanAttractionResponseDto {
         this.addr1 = planAttraction.getAttractionInfo().getAddr1();
         this.zipcode = planAttraction.getAttractionInfo().getZipcode();
         this.tel = planAttraction.getAttractionInfo().getTel();
+        this.latitude = planAttraction.getAttractionInfo().getLatitude();
+        this.longitude = planAttraction.getAttractionInfo().getLongitude();
     }
 }
