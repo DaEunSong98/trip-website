@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.service;
 
 import com.ssafy.enjoytrip.domain.*;
 import com.ssafy.enjoytrip.domain.team_relation.TeamRole;
+import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
 import com.ssafy.enjoytrip.exception.NotFoundException;
 import com.ssafy.enjoytrip.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +92,13 @@ public class TripPlanServiceImpl implements TripPlanService{
         planAttractionRepository.deleteById(planAttractionId);
     }
 
+    @Override
+    public void editTripPlan(Long userId, Long tripPlanId, Long tripTeamId, TripPlanRequestDto tripPlanRequestDto) {
+        getUserTripTeam(userId, tripTeamId);
+        TripPlan tripPlan = tripPlanRepository.findById(tripPlanId)
+                .orElseThrow(() -> new NotFoundException("잘못된 입력입니다."));
+        tripPlan.editPlan(tripPlanRequestDto.getPlanName(), tripPlanRequestDto.getPlanContent(), tripPlanRequestDto.getStartDate(), tripPlanRequestDto.getEndDate());
+    }
     private UserTripTeam getUserTripTeam(Long userId, Long tripTeamId) {
         UserTripTeam userTripTeam = userTripTeamRepository.getUserTripTeamByUserIdAndTeamId(userId, tripTeamId)
                 .orElseThrow(() -> new NotFoundException("유효하지 않은 입력"));

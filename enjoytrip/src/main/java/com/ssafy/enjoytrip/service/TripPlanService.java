@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.service;
 
 import com.ssafy.enjoytrip.domain.PlanAttraction;
 import com.ssafy.enjoytrip.domain.TripPlan;
+import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface TripPlanService {
     List<TripPlan> getTripPlansByTripTeamId(Long tripTeamId);
 
     void deletePlanAttraction(Long userId, Long planAttractionId, Long tripTeamId);
+
+    void editTripPlan(Long userId, Long tripPlanId, Long tripTeamId, TripPlanRequestDto tripPlanRequestDto);
 }

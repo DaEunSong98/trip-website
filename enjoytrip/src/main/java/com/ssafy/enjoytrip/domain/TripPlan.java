@@ -52,4 +52,11 @@ public class TripPlan extends BaseTimeEntity {
     public void addTripTeam(TripTeam tripTeam) {
         this.tripTeam = tripTeam;
     }
+
+    public void editPlan(String planName, String planContent, LocalDate startDate, LocalDate endDate) {
+        this.planName = planName;
+        this.planContent = planContent;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

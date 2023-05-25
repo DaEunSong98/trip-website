@@ -254,6 +254,18 @@ public class TripTeamController {
         return new TripPlanResponseDto(tripPlan);
     }
 
+    @LoginRequired
+    @PatchMapping("/{tripTeamId}/{tripPlanId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String editTripPlan(@PathVariable Long tripTeamId,
+                                           @PathVariable Long tripPlanId,
+                                           @RequestBody TripPlanRequestDto tripPlanRequestDto,
+                                           HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        tripPlanService.editTripPlan(user.getUserId(), tripPlanId, tripTeamId, tripPlanRequestDto);
+        return "수정이 완료되었습니다.";
+    }
+
     @DeleteMapping("/{tripTeamId}/{tripPlanId}/{planAttractionId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAttraction(@PathVariable Long planAttractionId, @PathVariable Long tripTeamId, HttpServletRequest request) {
