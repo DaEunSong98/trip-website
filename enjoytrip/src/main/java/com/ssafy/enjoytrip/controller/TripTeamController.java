@@ -87,7 +87,7 @@ public class TripTeamController {
     @LoginRequired
     @GetMapping("/{tripTeamId}/boards")
     @ResponseStatus(HttpStatus.OK)
-    public List<TeamBoardListResponseDto> getTeamBoardOfTripTeam(@PathVariable Long tripTeamId, @RequestBody BoardSearch boardSearch) {
+    public List<TeamBoardListResponseDto> getTeamBoardOfTripTeam(@PathVariable Long tripTeamId, @Valid BoardSearch boardSearch) {
         return teamBoardService.getAllTeamBoards(boardSearch, tripTeamId)
                 .stream().map(TeamBoardListResponseDto::new).collect(Collectors.toList());
     }
@@ -152,7 +152,7 @@ public class TripTeamController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{tripTeamId}/boards/write")
-    public String registerTeamBoard(@PathVariable Long tripTeamId, @RequestBody TeamBoardAddRequestDto teamBoardAddRequestDto, HttpServletRequest request) throws IOException {
+    public String registerTeamBoard(@PathVariable Long tripTeamId, @RequestBody TeamBoardAddRequestDto teamBoardAddRequestDto, HttpServletRequest request) {
         LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
         TripTeam tripTeam = tripTeamService.findTripTeam(tripTeamId);
 

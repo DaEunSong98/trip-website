@@ -15,12 +15,15 @@ public class TeamCommentResponseDto {
 
     private String nickname;
 
+    private Long userId;
+
     private LocalDateTime createdDate;
 
     public TeamCommentResponseDto(TeamComment teamComment) {
         this.commentId = teamComment.getTeamCommentId();
         this.content = teamComment.getContent();
         this.nickname = teamComment.getUser().getNickname();
+        this.userId = teamComment.getUser().getUserId();
         this.createdDate = teamComment.getCreatedDate();
     }
 
