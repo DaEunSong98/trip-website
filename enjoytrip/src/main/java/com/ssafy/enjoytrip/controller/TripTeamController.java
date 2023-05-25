@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ssafy.enjoytrip.token.LoginTokenConst.USER_INFO;
@@ -65,6 +66,14 @@ public class TripTeamController {
     public TripTeamResponseDto getTripTeamInfo(@PathVariable Long tripTeamId) {
         TripTeam tripTeam = tripTeamService.findTripTeam(tripTeamId);
         return new TripTeamResponseDto(tripTeam);
+    }
+
+    @PatchMapping("/{tripTeamId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String editTripTeamInfo(@PathVariable Long tripTeamId, @RequestBody Map<String, String> map, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        tripTeamService.editTripTeam(user.getUserId(), tripTeamId, map.get("teamName"));
+        return "수정이 완료되었습니다.";
     }
 
     @LoginRequired

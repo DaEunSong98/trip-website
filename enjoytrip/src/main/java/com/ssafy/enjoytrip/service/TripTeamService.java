@@ -8,6 +8,8 @@ import java.util.List;
 public interface TripTeamService {
     void makeTripTeam(Long userId, String teamName);
 
+    void editTripTeam(Long userId, Long tripTeamId, String teamName);
+
     void deleteTripTeam(Long tripTeamId, Long userId);
 
     TripTeam findTripTeam(Long tripTeamId);

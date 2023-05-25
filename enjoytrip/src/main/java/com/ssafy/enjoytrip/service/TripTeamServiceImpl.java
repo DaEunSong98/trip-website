@@ -46,6 +46,17 @@ public class TripTeamServiceImpl implements TripTeamService {
     }
 
     @Override
+    public void editTripTeam(Long userId, Long tripTeamId, String teamName) {
+        getUserTripTeamAndValidLeader(userId, tripTeamId);
+
+        TripTeam tripTeam = tripTeamRepository.findById(tripTeamId)
+                .orElseThrow(() -> new NotFoundException("잘못된 팀 입력"));
+
+        tripTeam.editTeamName(teamName);
+
+    }
+
+    @Override
     public void deleteTripTeam(Long tripTeamId, Long userId) {
         getUserTripTeamAndValidLeader(userId, tripTeamId);
         teamCommentRepository.deleteAllCommentByTeam(teamBoardRepository.findAllTeamBoardByTripTeam(tripTeamId));

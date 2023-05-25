@@ -42,4 +42,8 @@ public class TripTeam extends BaseTimeEntity {
         tripPlans.add(tripPlan);
         tripPlan.addTripTeam(this);
     }
+
+    public void editTeamName(String teamName) {
+        this.teamName = teamName;
+    }
 }
