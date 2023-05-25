@@ -1,13 +1,10 @@
 package com.ssafy.enjoytrip.controller;
 
-import com.ssafy.enjoytrip.domain.TripPlan;
-import com.ssafy.enjoytrip.domain.TripTeam;
-import com.ssafy.enjoytrip.domain.UserTripTeam;
-import com.ssafy.enjoytrip.dto.request.AttractionAddRequestDto;
-import com.ssafy.enjoytrip.dto.request.TripPlanRequestDto;
-import com.ssafy.enjoytrip.dto.request.TripTeamAddRequestDto;
-import com.ssafy.enjoytrip.dto.request.UserInviteDto;
+import com.ssafy.enjoytrip.domain.*;
+import com.ssafy.enjoytrip.dto.request.*;
 import com.ssafy.enjoytrip.dto.response.*;
+import com.ssafy.enjoytrip.service.TeamBoardService;
+import com.ssafy.enjoytrip.service.TeamCommentService;
 import com.ssafy.enjoytrip.service.TripPlanService;
 import com.ssafy.enjoytrip.service.TripTeamService;
 import com.ssafy.enjoytrip.token.LoginRequired;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +31,10 @@ public class TripTeamController {
     private final TripTeamService tripTeamService;
 
     private final TripPlanService tripPlanService;
+
+    private final TeamBoardService teamBoardService;
+
+    private final TeamCommentService teamCommentService;
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.OK)
@@ -71,6 +73,109 @@ public class TripTeamController {
     public List<TripPlanListResponseDto> getTripPlansOfTripTeam(@PathVariable Long tripTeamId) {
         return tripPlanService.getTripPlansByTripTeamId(tripTeamId)
                 .stream().map(TripPlanListResponseDto::new).collect(Collectors.toList());
+    }
+
+    @LoginRequired
+    @GetMapping("/{tripTeamId}/boards")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TeamBoardListResponseDto> getTeamBoardOfTripTeam(@PathVariable Long tripTeamId, @RequestBody BoardSearch boardSearch) {
+        return teamBoardService.getAllTeamBoards(boardSearch, tripTeamId)
+                .stream().map(TeamBoardListResponseDto::new).collect(Collectors.toList());
+    }
+
+    @LoginRequired
+    @GetMapping("/{tripTeamId}/boards/{teamBoardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TeamBoardDetailResponseDto getTeamBoardDetailOfTripTeam(@PathVariable Long teamBoardId) {
+        return new TeamBoardDetailResponseDto(teamBoardService.getTeamBoardDetail(teamBoardId));
+    }
+
+    @GetMapping("/{tripTeamId}/boards/{teamBoardId}/comments")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TeamCommentResponseDto> getComments(@PathVariable long teamBoardId) {
+        return teamCommentService.getAllTeamComment(teamBoardId).stream()
+                .map(TeamCommentResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/{tripTeamId}/boards/{teamBoardId}/comments")
+    @ResponseStatus(HttpStatus.OK)
+    public String addTeamComment(@PathVariable long teamBoardId, @RequestBody TeamComment teamComment, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        teamCommentService.addTeamComment(teamComment.getContent(), teamBoardId, user.getUserId());
+        return "작성이 완료되었습니다.";
+    }
+
+    @PatchMapping("/{tripTeamId}/boards/{teamBoardId}/comments/{teamCommentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String modifyComment(@PathVariable long teamCommentId,
+                                              @RequestBody TeamComment teamComment,
+                                              HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        teamCommentService.editTeamComment(teamCommentId, teamComment.getContent(), user.getUserId());
+        return "수정이 완료되었습니다.";
+
+    }
+
+    @DeleteMapping("/{tripTeamId}/boards/{teamBoardId}/comments/{teamCommentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteTeamComment(@PathVariable long teamCommentId, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        teamCommentService.deleteTeamComment(teamCommentId, user.getUserId());
+        return "삭제가 완료되었습니다.";
+    }
+
+    @LoginRequired
+    @GetMapping("/{tripTeamId}/boards/{teamBoardId}/comments/{teamCommentId}/validWriter")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isCommentWriter(@PathVariable long teamCommentId, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        return teamCommentService.isTeamCommentWriter(user.getUserId(), teamCommentId);
+    }
+
+    @LoginRequired
+    @GetMapping("/{tripTeamId}/boards/{teamBoardId}/validWriter")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isBoardWriter(@PathVariable long teamBoardId, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        return teamBoardService.isTeamBoardWriter(user.getUserId(), teamBoardId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/{tripTeamId}/boards/write")
+    public String registerTeamBoard(@PathVariable Long tripTeamId, @RequestBody TeamBoardAddRequestDto teamBoardAddRequestDto, HttpServletRequest request) throws IOException {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        TripTeam tripTeam = tripTeamService.findTripTeam(tripTeamId);
+
+        TeamBoard board = TeamBoard.builder()
+                .title(teamBoardAddRequestDto.getTitle())
+                .content(teamBoardAddRequestDto.getContent())
+                .tripTeam(tripTeam)
+                .build();
+
+        teamBoardService.addTeamBoard(board, user.getUserId());
+
+        return "생성이 완료되었습니다";
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{tripTeamId}/boards/{teamBoardId}")
+    public String modifyTeamBoard(@PathVariable long teamBoardId, @RequestBody TeamBoardAddRequestDto teamBoardAddRequestDto, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        TeamBoard board = teamBoardService.getTeamBoardDetail(teamBoardId);
+        if (!board.getUser().getUserId().equals(user.getUserId())) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
+        teamBoardService.updateTeamBoard(teamBoardId, teamBoardAddRequestDto.getTitle(), teamBoardAddRequestDto.getContent());
+        return "수정이 완료되었습니다";
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{tripTeamId}/boards/{teamBoardId}")
+    public String deleteBoard(@PathVariable long teamBoardId, HttpServletRequest request) {
+        LoginTokenInfo user = (LoginTokenInfo) request.getAttribute(USER_INFO);
+        teamBoardService.deleteTeamBoard(teamBoardId, user.getUserId());
+        return "삭제가 완료되었습니다";
     }
 
 

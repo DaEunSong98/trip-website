@@ -17,6 +17,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,10 +40,17 @@ class AttractionControllerRestDocTest {
     @Test
     @DisplayName("여행지 조회")
     void test1() throws Exception {
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/attraction/search?title=산"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcRestDocumentation.document("test"));
+        mockMvc.perform(get("/attraction/search")
+                        .param("title", "산"))
+                .andExpect(status().isOk())
+                .andDo(document("test",
+                        requestParameters(
+                                parameterWithName("title").description("여행지 이름").optional(),
+                                parameterWithName("contentTypeId").description("여행지 타입").optional(),
+                                parameterWithName("sidoCode").description("여행지 시 정보").optional(),
+                                parameterWithName("gugunCode").description("여행지 군 정보").optional()
+                        )
+                ));
     }
 
 }

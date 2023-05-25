@@ -5,10 +5,7 @@ import com.ssafy.enjoytrip.domain.User;
 import com.ssafy.enjoytrip.domain.UserTripTeam;
 import com.ssafy.enjoytrip.domain.team_relation.TeamRole;
 import com.ssafy.enjoytrip.exception.NotFoundException;
-import com.ssafy.enjoytrip.repository.TripPlanRepository;
-import com.ssafy.enjoytrip.repository.TripTeamRepository;
-import com.ssafy.enjoytrip.repository.UserRepository;
-import com.ssafy.enjoytrip.repository.UserTripTeamRepository;
+import com.ssafy.enjoytrip.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +27,10 @@ public class TripTeamServiceImpl implements TripTeamService {
 
     private final TripPlanRepository tripPlanRepository;
 
+    private final TeamBoardRepository teamBoardRepository;
+
+    private final TeamCommentRepository teamCommentRepository;
+
     @Override
     public void makeTripTeam(Long userId, String teamName) {
         User findUser = userRepository.findById(userId)
@@ -47,6 +48,8 @@ public class TripTeamServiceImpl implements TripTeamService {
     @Override
     public void deleteTripTeam(Long tripTeamId, Long userId) {
         getUserTripTeamAndValidLeader(userId, tripTeamId);
+        teamCommentRepository.deleteAllCommentByTeam(teamBoardRepository.findAllTeamBoardByTripTeam(tripTeamId));
+        teamBoardRepository.deleteTeamBoardByTeamId(tripTeamId);
         userTripTeamRepository.deleteUserTripTeamByTripTeamId(tripTeamId);
         tripPlanRepository.deleteTripPlanByTripTeamId(tripTeamId);
         tripTeamRepository.deleteById(tripTeamId);
