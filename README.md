@@ -26,13 +26,12 @@
 
 # 2 -1. E-R Diagram 
 
-
-![enjoytrip_E-R Diagram](/uploads/914595acaebbba575decb60c91799f52/jjinmakerd.png)
+![lastDbErd](/uploads/db8e63041b3f688f1ba03d366ce464c6/lastDbErd.png)
   
   
 # 2 -2. Class Diagram 
 
-![enjoytrip_classDiagram](/uploads/8ea457f7b67e185b2d357018f8533899/enjoytrip_classDiagram.png)
+![enjoytripclassdiagram__1_](/uploads/4585cb65fb84d53f5e92c3d3b03a31fe/enjoytripclassdiagram__1_.png)
 
 
 # 3. 기능 동작(PostMan)
